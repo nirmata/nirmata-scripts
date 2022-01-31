@@ -2,7 +2,7 @@
 
 #set -x
 
-# This script is used to delete nirmata users who do not belong to any teams. Before you run this script, please make sure you have curl and jq installed. Make sure to update the <api-key> value from the nirmata profile. 
+# This script is used to delete nirmata users who do not belong to any teams. Before you run this script, please make sure you have curl and jq installed. Make sure to update the <api-key> value in the script. NOTE: <api-key> can be found under your nirmata profile.
 
 TOKEN=<api-key>
 URL=www.nirmata.io
