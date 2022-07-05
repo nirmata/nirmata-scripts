@@ -22,3 +22,5 @@ Here is the example from developer tools. The role should be sysadmin and the id
 <ins>**Usage:**</ins>
 
 Execute the script and provide the inputs requested by the script. This script will allow you to set the password for specific tenant superadmin using their user id's in Nirmata. 
+
+![alt Script Output:](https://github.com/nirmata/nirmata-scripts/blob/main/setpass/setpassoutput.PNG)
