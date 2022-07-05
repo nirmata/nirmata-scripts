@@ -1,4 +1,4 @@
-This script is used to set password for superadmins of Nirmata tenants.
+This script is used to set password for superadmins of Nirmata tenant.
 
 Prerequisite:
 
