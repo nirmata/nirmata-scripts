@@ -1,4 +1,4 @@
-This script is used to set password for superadmins of Nirmata tenant.
+This script is used to set password for superadmins of newly created Nirmata tenant in existing instance of Nirmata.
 
 <ins>**Prerequisite:**</ins>
 
@@ -6,7 +6,7 @@ This script is used to set password for superadmins of Nirmata tenant.
 - Make sure you have created a tenant with a super admin in Nirmata
 - Make sure you have below information handy when running the script
   - superadmin email address
-  - superadmin password for the tenant
+  - superadmin password
   - Nirmata URL
   - Tenant name in Nirmata
   - Admin id for the Nirmata superadmin account
