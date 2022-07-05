@@ -1,6 +1,6 @@
 This script is used to set password for superadmins of Nirmata tenant.
 
-<u>**Prerequisite:**</u>
+<ins>**Prerequisite:**</ins>
 
 - Make sure you have created a tenant with a super admin in Nirmata
 - Make sure you have below information handy when running the script
