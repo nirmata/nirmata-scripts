@@ -1,4 +1,4 @@
-<p align="right"> This script is used to delete users that do not belong to any teams in Nirmata. 
+<p align="left"> This script is used to delete users that do not belong to any teams in Nirmata. 
 
 Prerequites
 - Make sure you have curl and jq installed on the machine where you are running this script
