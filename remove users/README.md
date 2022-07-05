@@ -1,1 +1,1 @@
-This script is used to delete users that do not belong to any teams in Nirmata. 
+- This script is used to delete users that do not belong to any teams in Nirmata. 
