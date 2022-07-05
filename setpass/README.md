@@ -11,7 +11,7 @@ This script is used to set password for superadmins of Nirmata tenant.
   - Tenant name in Nirmata
   - Admin id for the Nirmata superadmin account
 
-NOTE: Admin id for the superadmin account can be found from the developer tools under Network tab when logged in by your superadmin email address. 
+NOTE: Admin id for the superadmin account can be found from the developer tools under Network tab when logged in with your superadmin email address. 
 
 ![alt Admin id](https://github.com/nirmata/nirmata-scripts/blob/main/setpass/setpass.PNG)
 
