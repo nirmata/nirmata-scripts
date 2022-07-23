@@ -107,4 +107,4 @@ Updating password
   "teams" : [ ]
 }
 ```
-![alt Script Output:](https://github.com/nirmata/nirmata-scripts/blob/main/setpass/setpassoutput.PNG)
+
