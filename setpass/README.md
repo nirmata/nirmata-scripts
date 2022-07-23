@@ -3,8 +3,8 @@ This script is used to set password for superadmins of newly created Nirmata ten
 <ins>**Prerequisites:**</ins>
 
 - Make sure `curl` and `jq` are installed on the machine where you are running this script
-- Make sure you have created a tenant with a super admin in Nirmata
-- Make sure you have below information handy when running the script
+- Nirmata tenant with a super admin configured
+- The script runs in interactive mode, make sure you have below information when you execute the script:
   - superadmin email address
   - superadmin password
   - Nirmata URL
