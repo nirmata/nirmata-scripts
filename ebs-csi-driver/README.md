@@ -11,7 +11,7 @@ This repo consists of files needed to install ebs csi driver. In order to instal
 Execute the script with cluster name as the argument
 
 ```sh 
-$ ./deploy-ebssc.sh eks121velero
+$ ./deploy-ebssc.sh <cluster-name>
 
 Creating EBS CSI driver IAM role for service account!
 Deploying EBS CSI add-on!
