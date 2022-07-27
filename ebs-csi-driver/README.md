@@ -5,6 +5,7 @@ This repo consists of files needed to install `ebs csi` driver. In order to inst
 
 ## Prerequisites
 * `aws cli` installed and configured
+* `jq` installed
  
 ## How it works
 
