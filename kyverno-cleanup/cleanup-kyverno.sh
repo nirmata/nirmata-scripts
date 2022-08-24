@@ -32,7 +32,7 @@ else
 		curl -H "Content-Type: application/json" -X PUT --data-binary @tmp.json http://localhost:8001/api/v1/namespaces/$name/finalize
 		pkill -9 -f "kubectl proxy"
 		rm tmp.json
-		timeout 5 kubectl delete ns kyverno
+		timeout 5 kubectl delete ns $name
 		echo "Deleted kyverno namespace successfully"
 		kubectl get ns -A
 	fi
