@@ -5,7 +5,7 @@ This script is used for deploying a policySet on a cluster in NPM
 This script will require
 - `curl`, `jq` to be installed on the machine where this will be run
 - Nirmata API token updated in the script
-- A Kubernetes cluster to add in NPM
+- A Kubernetes cluster connected in NPM
  
 <ins>**Usage:**</ins>
 
