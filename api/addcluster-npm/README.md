@@ -1,20 +1,12 @@
 
 This page walks you through the process of adding a cluster in NPM using Nirmata API's
 
-This script is used to set password for superadmins of newly created Nirmata tenant in existing instance of Nirmata.
+This script is used for adding a cluster in NPM using Nirmata API's
 
 <ins>**Prerequisites:**</ins>
 
-- Make sure `curl` and `jq` are installed on the machine where you are running this script
-- Nirmata tenant with a super admin configured
-- The script runs in an interactive mode, so make sure you have below information when you execute the script:
-  - superadmin email address
-  - superadmin password
-  - Nirmata URL
-  - Tenant name in Nirmata
-  - Admin id for the Nirmata superadmin account
-
-NOTE: Admin id for the superadmin account can be found from the developer tools under Network tab when logged in with your superadmin email address. 
+- Make sure `curl`, `yq` and `jq` are installed on the machine where you are running this script
+- <api-token> updated in the script
 
 ![alt Admin id](https://github.com/nirmata/nirmata-scripts/blob/main/setpass/setpass.PNG)
 
