@@ -1,6 +1,4 @@
 
-This page walks you through the process of adding a cluster in NPM using Nirmata API's
-
 This script is used for adding a cluster in NPM using Nirmata API's
 
 <ins>**Prerequisites:**</ins>
