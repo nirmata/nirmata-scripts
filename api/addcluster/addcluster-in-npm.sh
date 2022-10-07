@@ -1,8 +1,14 @@
 #!/usr/bin/bash
 
+
+if [[ $# = 0 ]]; then
+        echo "Uage: $0 <cluster-name>"
+        exit 1
+fi
+
 CLUSTERNAME=$1
-TOKEN="<api-token>"
-NIRMATAURL="https://www.nirmata.io"
+TOKEN=$2
+NIRMATAURL="https://nirmata.io"
 
 curl -s -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Authorization: NIRMATA-API $TOKEN" -X POST "$NIRMATAURL/cluster/api/txn" -d "
 {
@@ -10,8 +16,8 @@ curl -s -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Authoriz
     {
       \"mode\": \"discovered\",
       \"name\": \"$CLUSTERNAME\",
-      \"typeSelector\": \"default-manual-install-policy-manager-type\",
-      \"isKyvernoAutoInstall\": false,
+      \"typeSelector\": \"default-policy-manager-type\",
+      \"isKyvernoAutoInstall\": true,
       \"isKyvernoExist\": true,
       \"modelIndex\": \"KubernetesCluster\",
       \"config\": [
@@ -34,8 +40,11 @@ curl -s -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Authoriz
 }" | jq . > register-cluster.json
 
 CLUSTERID=$(curl -s -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Authorization: NIRMATA-API $TOKEN" -X GET "$NIRMATAURL/cluster/api/KubernetesCluster?fields=id,name" 2>&1 | jq ".[] | select( .name == \"$CLUSTERNAME\" ).id" | sed "s/\"//g")
+echo $CLUSTERID
 
-sed "s/tokenvariable/$CLUSTERID/g" nirmata-kube-controller-template.yaml > nirmata-kube-controller-$CLUSTERNAME.yaml
+curl -s -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Authorization: NIRMATA-API $TOKEN" -X GET "$NIRMATAURL/cluster/api/KubernetesCluster/$CLUSTERID/yaml" | jq '."nirmata-kube-controller.yaml"' > controller.json
+yq -P '.' controller.json > nirmata-kube-controller-$CLUSTERNAME.yaml
+cat nirmata-kube-controller-$CLUSTERNAME.yaml
 
 kubectl apply -f nirmata-kube-controller-$CLUSTERNAME.yaml 1> /dev/null
 kubectl apply -f nirmata-kube-controller-$CLUSTERNAME.yaml 1> /dev/null
