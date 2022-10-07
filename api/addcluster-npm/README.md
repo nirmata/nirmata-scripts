@@ -7,15 +7,17 @@ This script is used for adding a cluster in NPM using Nirmata API's
 
 This script will require
 - `curl`, `yq` and `jq` to be installed on the machine where this will be run
-- api-token updated in the script
+- Nirmata API token updated in the script
 - A Kubernetes cluster to add in NPM
 - 
 <ins>**Usage:**</ins>
 
-Execute the script and provide the inputs requested by the script. This script will allow you to set the password for specific tenant superadmin using their user id's in Nirmata. 
+Execute the script with cluster name as an argument
 
 ```sh
+root@ip-172-31-81-194:~/npm/nirmata-scripts/api/addcluster-npm# ./addcluster.sh kindtest24
 
+Cluster added to NPM successfully
 ```
 
 
