@@ -7,7 +7,7 @@ if [[ $# = 0 ]]; then
 fi
 
 CLUSTERNAME=$1
-TOKEN=$2
+TOKEN="<api-token>"
 NIRMATAURL="https://nirmata.io"
 
 curl -s -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Authorization: NIRMATA-API $TOKEN" -X POST "$NIRMATAURL/cluster/api/txn" -d "
