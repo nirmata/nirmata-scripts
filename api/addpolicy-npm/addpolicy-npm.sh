@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-TOKEN="wIRmfEzjK4zNOWA6IivB78YqdxwpAkW1GmPlqiTkG8yNd9QMe5MVPHDMIm2e4bglROz6hah28m3ivMoPiXYWYw=="
+TOKEN="<api-token>"
 NIRMATAURL="https://nirmata.io"
 
 POLICYSET_NAME=$1
