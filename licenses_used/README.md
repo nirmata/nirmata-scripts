@@ -8,7 +8,7 @@ This script is used to find out the memorycapacity, memorylimit, memoryrequest, 
 
 <ins>**Usage:**</ins>
 
-Execute the script and provide the inputs requested by the script. This script will allow you to set the password for specific tenant superadmin using their user id's in Nirmata. 
+Execute the script and provide the Nirmata API token for your tenant. Also, update the NIRMATAURL variable in the script based on your environment. 
 
 ```sh
 root@ip-172-31-81-194:~/scripts/addcluster# ./collect-memory-info.sh
