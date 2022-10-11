@@ -2,6 +2,19 @@
 
 NIRMATAURL="https://nirmata.io"
 TOTAL_LICENSES=0
+JQ_COUNT=$(which jq | wc -l)
+CURL_COUNT=$(which curl | wc -l)
+
+
+if [[ $JQ_COUNT = 0 ]]; then
+        echo -e "Please install jq before running this script"
+        exit 1
+fi
+
+if [[ $CURL_COUNT = 0 ]]; then
+        echo -e "Please install curl before running this script"
+        exit 1
+fi
 
 echo
 echo -e "Enter the Nirmata API token: \n"
