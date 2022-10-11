@@ -8,7 +8,7 @@ This script is used to find out the memorycapacity, memorylimit, memoryrequest, 
 
 <ins>**Usage:**</ins>
 
-Execute the script and provide the Nirmata API token for your tenant. Also, update the NIRMATAURL variable in the script based on your environment. 
+Before running the script, update the NIRMATAURL variable in the script based on your environment. Execute the script and provide the Nirmata API token for your tenant. 
 
 ```sh
 root@ip-172-31-81-194:~/scripts/addcluster# ./collect-memory-info.sh
