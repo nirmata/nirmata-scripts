@@ -1,7 +1,8 @@
 $ cat create-environment-nctl.sh
 #!/usr/bin/bash
 
-filename='/c/Users/Sagar/Downloads/csv/create-env-nctl.csv'
+#filename='/c/Users/Sagar/Downloads/csv/create-env-nctl.csv'
+filename=''
 cat $filename | grep -v environment-name > tempfile.txt
 
 
