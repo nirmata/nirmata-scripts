@@ -2,7 +2,7 @@ This script is used to create environments in Nirmata using a csv file which con
 
 <ins>**Usage:**</ins>
 
-Before running the script, update the NIRMATAURL variable in the script based on your environment. Execute the script and provide the Nirmata API token for your tenant. 
+Execute the script and provide the Nirmata API token for your tenant. 
 
 ```sh
 
