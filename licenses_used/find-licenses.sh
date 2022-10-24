@@ -32,9 +32,9 @@ do
         CLUSTERID=$(curl -s -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Authorization: NIRMATA-API $TOKEN" -X GET "$NIRMATAURL/cluster/api/KubernetesCluster?fields=id,name" 2>&1 | jq ".[] | select( .name == \"$CLUSTERNAME\" ).id" | sed "s/\"//g")
         #echo -e "$CLUSTERNAME:\t$CLUSTERID"
         MEMCAP=$(curl -s -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Authorization: NIRMATA-API $TOKEN" -X GET "$NIRMATAURL/cluster/api/KubernetesCluster/$CLUSTERID/ClusterStats?fields=memoryCapacity" | jq .[].memoryCapacity)
-        MEMLIMIT=$(curl -s -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Authorization: NIRMATA-API $TOKEN" -X GET "https://nirmata.io/cluster/api/KubernetesCluster/$CLUSTERID/ClusterStats?fields=memoryLimit" | jq .[].memoryLimit)
-        MEMREQUEST=$(curl -s -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Authorization: NIRMATA-API $TOKEN" -X GET "https://nirmata.io/cluster/api/KubernetesCluster/$CLUSTERID/ClusterStats?fields=memoryRequest" | jq .[].memoryRequest)
-        MEMUSAGE=$(curl -s -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Authorization: NIRMATA-API $TOKEN" -X GET "https://nirmata.io/cluster/api/KubernetesCluster/$CLUSTERID/ClusterStats?fields=memoryUsage" | jq .[].memoryUsage)
+        MEMLIMIT=$(curl -s -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Authorization: NIRMATA-API $TOKEN" -X GET "$NIRMATAURL/cluster/api/KubernetesCluster/$CLUSTERID/ClusterStats?fields=memoryLimit" | jq .[].memoryLimit)
+        MEMREQUEST=$(curl -s -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Authorization: NIRMATA-API $TOKEN" -X GET "$NIRMATAURL/cluster/api/KubernetesCluster/$CLUSTERID/ClusterStats?fields=memoryRequest" | jq .[].memoryRequest)
+        MEMUSAGE=$(curl -s -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Authorization: NIRMATA-API $TOKEN" -X GET "$NIRMATAURL/cluster/api/KubernetesCluster/$CLUSTERID/ClusterStats?fields=memoryUsage" | jq .[].memoryUsage)
         MEMCAP_GiB=$(jq -n $MEMCAP/1073741824)
         MEMLIMIT_GiB=$(jq -n $MEMLIMIT/1073741824)
         MEMREQUEST_GiB=$(jq -n $MEMREQUEST/1073741824)
