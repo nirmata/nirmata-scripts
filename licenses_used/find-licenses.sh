@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-NIRMATAURL="https://nirmata.io"
+NIRMATAURL=$1
 TOTAL_LICENSES=0
 JQ_COUNT=$(which jq | wc -l)
 CURL_COUNT=$(which curl | wc -l)
@@ -13,6 +13,11 @@ fi
 
 if [[ $CURL_COUNT = 0 ]]; then
         echo -e "Please install curl before running this script"
+        exit 1
+fi
+
+if [[ $# != 1 ]]; then
+        echo -e "\nUsage: $0 <Nirmata URL>\n" 
         exit 1
 fi
 
