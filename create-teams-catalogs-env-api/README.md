@@ -11,7 +11,8 @@ $2 - Path to file consisting of namespaces
 $3 - Cluser Name
 ```
 
-<ins>**Note:**</ins> The resources in Nirmata are created by appending a string "ea1qa" to the namespace. This can be updated in the script if needed. 
+<ins>**Note:**</ins> 
+The resources in Nirmata are created by appending a string "ea1qa" to the namespace. This can be updated in the script if needed. 
 ```sh
 
 $ ./create-teams-catalog-env.sh https://nirmata.io namespaces.txt calico-ipip4
