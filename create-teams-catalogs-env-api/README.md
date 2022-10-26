@@ -1,5 +1,9 @@
 This script is used to create teams, catalogs and environments in Nirmata using a file which consists of a list of namespaces.
 
+<ins>**Prerequisites:**</ins>
+
+- Make sure `curl` and `jq` are installed on the machine where you are running this script
+
 <ins>**Usage:**</ins>
 
 Execute the script with the required arguments and provide the Nirmata API token for your tenant. 
