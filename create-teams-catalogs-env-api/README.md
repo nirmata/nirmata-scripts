@@ -5,9 +5,11 @@ This script is used to create teams, catalogs and environments in Nirmata using 
 Execute the script with the required arguments and provide the Nirmata API token for your tenant. 
 
 Required Arguments:
+```sh
 $1 - Nirmata URL
 $2 - Path to file consisting of namespaces
 $3 - Cluser Name
+```
 
 NOTE: The resources in Nirmata are created by appending a string "ea1qa" to the namespace. This can be updated in the script if needed. 
 ```sh
