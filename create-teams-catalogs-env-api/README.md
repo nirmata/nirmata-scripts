@@ -1,4 +1,4 @@
-This script is used to create teams, catalogs and environments in Nirmata using a file which consists of a list of namespaces. The 
+This script is used to create teams, catalogs and environments in Nirmata using a file which consists of a list of namespaces.
 
 <ins>**Usage:**</ins>
 
