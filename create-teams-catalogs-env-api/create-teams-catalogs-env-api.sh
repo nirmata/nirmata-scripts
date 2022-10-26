@@ -95,7 +95,7 @@ do
         ENVIRONMENT_EXISTS=""
         ENVIRONMENT_EXISTS=$(curl -s -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Authorization: NIRMATA-API $TOKEN" -X GET "$NIRMATAURL/environments/api/environments?fields=id,name" | jq ".[] | select( .name == \"$environment-$STRING\" ).id" | sed "s/\"//g")
         if [[ ! -z $ENVIRONMENT_EXISTS ]]; then
-                echo "Catalog \"$environment-$STRING\" already exists"
+                echo "Environment \"$environment-$STRING\" already exists"
                 continue
         fi
         OWNER_ID=$(curl -s -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Authorization: NIRMATA-API $TOKEN" -X GET "$NIRMATAURL/users/api/teams?fields=id,name" | jq ".[] | select( .name == \"$environment-$STRING\" ).id" | sed "s/\"//g")i
