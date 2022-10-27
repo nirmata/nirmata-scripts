@@ -12,7 +12,7 @@ Required Arguments:
 ```sh
 $1 - Nirmata URL
 $2 - Path to file consisting of namespaces
-$3 - Cluser Name
+$3 - Cluster Name
 ```
 
 <ins>**Note:**</ins> 
