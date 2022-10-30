@@ -1,7 +1,7 @@
 Namespace,EnvironmentType
-acog,c1m5
-act-carbon-calc-tool,c1m5
-ai-gis,c1m5
-ami-enterprise-services,c2m10
-ami-ops-tool,c1m5
-appcat,c1m5
+namespace1,c1m5
+namespace2,c1m5
+namespace3,c1m5
+namespace4,c2m10
+namespace5,c1m5
+namespace6,c1m5
