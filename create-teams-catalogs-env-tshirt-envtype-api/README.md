@@ -11,7 +11,7 @@ Execute the script with the required arguments and provide the Nirmata API token
 Required Arguments:
 ```sh
 $1 - Nirmata URL
-$2 - Path to file consisting of namespaces
+$2 - Path to csv file consisting of namespaces and environment types (See example csv file for reference)
 $3 - Cluster Name
 ```
 
