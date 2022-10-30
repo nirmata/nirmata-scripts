@@ -21,19 +21,28 @@ The resources in Nirmata are created by appending a string "ea1qa" to the namesp
 
 ```sh
 
-$ ./create-teams-catalog-env.sh https://nirmata.io namespaces.txt calico-ipip4
+$ ./create-teams-catalog-env-tshirt.sh https://nirmata.io tshirt-size.csv calico-ipip4
 
 Enter the Nirmata API token:
 
-Team "test-namespace1-ea1qa" already exists
-Team "test-namespace2-ea1qa" already exists
-Team "test-namespace3-ea1qa" already exists
-Catalog "test-namespace1-ea1qa" already exists
-Catalog "test-namespace2-ea1qa" already exists
-Catalog "test-namespace3-ea1qa" already exists
-Environment "test-namespace1-ea1qa" created successfully
-Environment "test-namespace2-ea1qa" created successfully
-Environment "test-namespace3-ea1qa" created successfully
+Team "namespace1-ea1qa" created successfully
+Team "namespace2-ea1qa" created successfully
+Team "namespace3-ea1qa" created successfully
+Team "namespace4-ea1qa" created successfully
+Team "namespace5-ea1qa" created successfully
+Team "namespace6-ea1qa" created successfully
+Catlog "namespace1-ea1qa" created successfully
+Catlog "namespace2-ea1qa" created successfully
+Catlog "namespace3-ea1qa" created successfully
+Catlog "namespace4-ea1qa" created successfully
+Catlog "namespace5-ea1qa" created successfully
+Catlog "namespace6-ea1qa" created successfully
+Environment "namespace1-ea1qa" created successfully
+Environment "namespace2-ea1qa" created successfully
+Environment "namespace3-ea1qa" created successfully
+Environment "namespace4-ea1qa" created successfully
+Environment "namespace5-ea1qa" created successfully
+Environment "namespace6-ea1qa" created successfully
 
 
 ```
