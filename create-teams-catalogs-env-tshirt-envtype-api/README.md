@@ -21,7 +21,7 @@ The resources in Nirmata are created by appending a string "ea1qa" to the namesp
 
 ```sh
 
-$ ./create-teams-catalog-env-tshirt.sh https://nirmata.io tshirt-size.csv calico-ipip4
+$ ./create-teams-catalog-env-tshirt.sh https://nirmata.io sample-tshirt-size.csv calico-ipip4
 
 Enter the Nirmata API token:
 
