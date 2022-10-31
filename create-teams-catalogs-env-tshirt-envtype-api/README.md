@@ -17,7 +17,7 @@ $3 - Cluster Name
 
 <ins>**Note:**</ins> 
 
-The resources in Nirmata are created by appending a string "ea1qa" to the namespace. This can be updated in the script if needed. 
+The teams in Nirmata are created by appending a string "ea1qa-team" to the namespace. The catalogs are created by appending a string "ea1qa-catalog" to the namespace and the environments are created by appending a string "ea1qa-team" to the namespace. The cluster nickname "ea1qa" can be updated in the script if needed
 
 ```sh
 
