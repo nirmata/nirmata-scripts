@@ -105,7 +105,7 @@ do
         #set -x
         CLUSTERID=$(curl -s -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Authorization: NIRMATA-API $TOKEN" -X GET "$NIRMATAURL/cluster/api/KubernetesCluster?fields=id,name" | jq ".[] | select( .name == \"$CLUSTERNAME\" ).id" | sed "s/\"//g")
 
-        ENVIRONMENT_EXISTS=""
+        ENVIRONMENT_TYPE=""
         ENVIRONMENT_TYPE=$(echo $environment | cut -d "," -f 2)
         environment=$(echo $environment | cut -d "," -f 1)
         ENVIRONMENT_EXISTS=""
