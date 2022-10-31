@@ -41,7 +41,7 @@ do
           \"delete\": []
         }"
         if [[ $? = 0 ]]; then
-                echO "Team \"$team-$STRING\" created successfully"
+                echo "Team \"$team-$STRING\" created successfully"
         else
                 echo "Something went wrong when creating team \"$team-$STRING\""
         fi
@@ -84,7 +84,7 @@ do
           \"delete\": []
         }"
         if [[ $? = 0 ]]; then
-                echO "Catlog \"$catalog-$STRING\" created successfully"
+                echo "Catlog \"$catalog-$STRING\" created successfully"
         else
                 echo "Something went wrong when creating catalog \"$catalog-$STRING\""
         fi
@@ -137,7 +137,7 @@ do
 
         }"
         if [[ $? = 0 ]]; then
-                echO "Environment \"$environment-$STRING\" created successfully"
+                echo "Environment \"$environment-$STRING\" created successfully"
         else
                 echo "Something went wrong when creating environment \"$environment-$STRING\""
         fi
