@@ -22,17 +22,17 @@ do
 
         TEAM_EXISTS=""
         team=$(echo $team | cut -d "," -f 1)
-        TEAM_EXISTS=$(curl -s -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Authorization: NIRMATA-API $TOKEN" -X GET "$NIRMATAURL/users/api/teams?fields=id,name" | jq ".[] | select( .name == \"$team-$STRING\" ).id" | sed "s/\"//g")
+        TEAM_EXISTS=$(curl -s -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Authorization: NIRMATA-API $TOKEN" -X GET "$NIRMATAURL/users/api/teams?fields=id,name" | jq ".[] | select( .name == \"$team-$STRING-team\" ).id" | sed "s/\"//g")
         if [[ ! -z $TEAM_EXISTS ]]; then
-                echo "Team \"$team-$STRING\" already exists"
+                echo "Team \"$team-$STRING-team\" already exists"
                 continue
         fi
         curl -s -o /dev/null -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Authorization: NIRMATA-API $TOKEN" -X POST "$NIRMATAURL/users/api/txn" -d "
         {
           \"create\": [
             {
-              \"name\": \"$team-$STRING\",
-              \"description\": \"$team-$STRING\",
+              \"name\": \"$team-$STRING-team\",
+              \"description\": \"$team-$STRING-team\",
               \"users\": [],
               \"modelIndex\": \"Team\"
             }
@@ -41,9 +41,9 @@ do
           \"delete\": []
         }"
         if [[ $? = 0 ]]; then
-                echo "Team \"$team-$STRING\" created successfully"
+                echO "Team \"$team-$STRING-team\" created successfully"
         else
-                echo "Something went wrong when creating team \"$team-$STRING\""
+                echo "Something went wrong when creating team \"$team-$STRING-team\""
         fi
 done
 
@@ -53,29 +53,38 @@ do
 
         CATALOG_EXISTS=""
         catalog=$(echo $catalog | cut -d "," -f 1)
-        CATALOG_EXISTS=$(curl -s -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Authorization: NIRMATA-API $TOKEN" -X GET "$NIRMATAURL/catalog/api/catalogs?fields=id,name" | jq ".[] | select( .name == \"$catalog-$STRING\" ).id" | sed "s/\"//g")
+        CATALOG_EXISTS=$(curl -s -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Authorization: NIRMATA-API $TOKEN" -X GET "$NIRMATAURL/catalog/api/catalogs?fields=id,name" | jq ".[] | select( .name == \"$catalog-$STRING-catalog\" ).id" | sed "s/\"//g")
         if [[ ! -z $CATALOG_EXISTS ]]; then
-                echo "Catalog \"$catalog-$STRING\" already exists"
+                echo "Catalog \"$catalog-$STRING-catalog\" already exists"
                 continue
         fi
-        OWNER_ID=$(curl -s -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Authorization: NIRMATA-API $TOKEN" -X GET "$NIRMATAURL/users/api/teams?fields=id,name" | jq ".[] | select( .name == \"$catalog-$STRING\" ).id" | sed "s/\"//g")
+        OWNER_ID=$(curl -s -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Authorization: NIRMATA-API $TOKEN" -X GET "$NIRMATAURL/users/api/teams?fields=id,name" | jq ".[] | select( .name == \"$catalog-$STRING-team\" ).id" | sed "s/\"//g")
 
         curl -s -o /dev/null -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Authorization: NIRMATA-API $TOKEN" -X POST "$NIRMATAURL/catalog/api/txn" -d "
 
         {
           \"create\": [
             {
-              \"name\": \"$catalog-$STRING\",
-              \"description\": \"$catalog-$STRING\",
+              \"name\": \"$catalog-$STRING-catalog\",
+              \"description\": \"$catalog-$STRING-catalog\",
               \"labels\": {},
               \"modelIndex\": \"Catalogs\",
               \"accessControlList\": [
                 {
                   \"ownerType\": \"team\",
                   \"ownerId\": \"$OWNER_ID\",
-                  \"ownerName\": \"$catalog-$STRING\",
+                  \"ownerName\": \"$catalog-$STRING-team\",
                   \"modelIndex\": \"AccessControlList\",
-                  \"enabled\": true
+                  \"enabled\": true,
+                  \"accessControls\": [
+                    {
+                      \"entityType\": \"team\",
+                      \"entityId\": \"$OWNER_ID\",
+                      \"permission\": \"edit\",
+                      \"entityName\": \"$catalog-$STRING-team\",
+                      \"modelIndex\": \"AccessControl\"
+                    }
+                  ]
                 }
               ]
             }
@@ -84,9 +93,9 @@ do
           \"delete\": []
         }"
         if [[ $? = 0 ]]; then
-                echo "Catlog \"$catalog-$STRING\" created successfully"
+                echO "Catalog \"$catalog-$STRING-catalog\" created successfully"
         else
-                echo "Something went wrong when creating catalog \"$catalog-$STRING\""
+                echo "Something went wrong when creating catalog \"$catalog-$STRING-catalog\""
         fi
 done
 
@@ -99,12 +108,13 @@ do
         ENVIRONMENT_EXISTS=""
         ENVIRONMENT_TYPE=$(echo $environment | cut -d "," -f 2)
         environment=$(echo $environment | cut -d "," -f 1)
+        ENVIRONMENT_EXISTS=""
         ENVIRONMENT_EXISTS=$(curl -s -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Authorization: NIRMATA-API $TOKEN" -X GET "$NIRMATAURL/environments/api/environments?fields=id,name" | jq ".[] | select( .name == \"$environment-$STRING\" ).id" | sed "s/\"//g")
         if [[ ! -z $ENVIRONMENT_EXISTS ]]; then
                 echo "Environment \"$environment-$STRING\" already exists"
                 continue
         fi
-        OWNER_ID=$(curl -s -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Authorization: NIRMATA-API $TOKEN" -X GET "$NIRMATAURL/users/api/teams?fields=id,name" | jq ".[] | select( .name == \"$environment-$STRING\" ).id" | sed "s/\"//g")
+        OWNER_ID=$(curl -s -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Authorization: NIRMATA-API $TOKEN" -X GET "$NIRMATAURL/users/api/teams?fields=id,name" | jq ".[] | select( .name == \"$environment-$STRING-team\" ).id" | sed "s/\"//g")
 
         #set +x
         curl -s -o /dev/null -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Authorization: NIRMATA-API $TOKEN" -X POST "$NIRMATAURL/environments/api/txn" -d "
@@ -126,18 +136,26 @@ do
                 {
                   \"ownerType\": \"team\",
                   \"ownerId\": \"$OWNER_ID\",
-                  \"ownerName\": \"$environment-$STRING\",
-                  \"modelIndex\": \"AccessControlList\"
+                  \"ownerName\": \"$environment-$STRING-team\",
+                  \"modelIndex\": \"AccessControlList\",
+                  \"accessControls\": [
+                    {
+                      \"entityType\": \"team\",
+                      \"entityId\": \"$OWNER_ID\",
+                      \"permission\": \"edit\",
+                      \"entityName\": \"$environment-$STRING-team\",
+                      \"modelIndex\": \"AccessControl\"
+                    }
+                  ]
                 }
               ]
             }
           ],
           \"update\": [],
           \"delete\": []
-
         }"
         if [[ $? = 0 ]]; then
-                echo "Environment \"$environment-$STRING\" created successfully"
+                echO "Environment \"$environment-$STRING\" created successfully"
         else
                 echo "Something went wrong when creating environment \"$environment-$STRING\""
         fi
