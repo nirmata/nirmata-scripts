@@ -25,18 +25,18 @@ $ ./create-teams-catalog-env-tshirt.sh https://nirmata.io sample-tshirt-size.csv
 
 Enter the Nirmata API token:
 
-Team "namespace1-ea1qa" created successfully
-Team "namespace2-ea1qa" created successfully
-Team "namespace3-ea1qa" created successfully
-Team "namespace4-ea1qa" created successfully
-Team "namespace5-ea1qa" created successfully
-Team "namespace6-ea1qa" created successfully
-Catlog "namespace1-ea1qa" created successfully
-Catlog "namespace2-ea1qa" created successfully
-Catlog "namespace3-ea1qa" created successfully
-Catlog "namespace4-ea1qa" created successfully
-Catlog "namespace5-ea1qa" created successfully
-Catlog "namespace6-ea1qa" created successfully
+Team "namespace1-ea1qa-team" created successfully
+Team "namespace2-ea1qa-team" created successfully
+Team "namespace3-ea1qa-team" created successfully
+Team "namespace4-ea1qa-team" created successfully
+Team "namespace5-ea1qa-team" created successfully
+Team "namespace6-ea1qa-team" created successfully
+Catlog "namespace1-ea1qa-catalog" created successfully
+Catlog "namespace2-ea1qa-catalog" created successfully
+Catlog "namespace3-ea1qa-catalog" created successfully
+Catlog "namespace4-ea1qa-catalog" created successfully
+Catlog "namespace5-ea1qa-catalog" created successfully
+Catlog "namespace6-ea1qa-catalog" created successfully
 Environment "namespace1-ea1qa" created successfully
 Environment "namespace2-ea1qa" created successfully
 Environment "namespace3-ea1qa" created successfully
