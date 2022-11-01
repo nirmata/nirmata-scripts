@@ -8,6 +8,12 @@ This script will require
 - Nirmata API token updated in the script
 - A Kubernetes cluster to add in NPM
 
+<ins>**NOTE:**</ins>
+While executing the script, if you come across below error, it can safely ignored. 
+
+error: unable to recognize "nirmata-kube-controller-testcluster14.yaml": no matches for kind "KyvernoOperator" in version "operator.kyverno.io/v1"
+
+
 <ins>**Usage:**</ins>
 
 Execute the script with cluster name and Nirmata URL as arguments
@@ -17,7 +23,7 @@ root@ip-172-31-81-194:~/npm/nirmata-scripts/api/addcluster-npm# ./addcluster.sh 
 
 Enter the Nirmata API token:
 
-Cluster added to NPM successfully
+
 ```
 
 
