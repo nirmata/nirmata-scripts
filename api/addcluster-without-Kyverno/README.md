@@ -10,10 +10,12 @@ This script will require
 
 <ins>**Usage:**</ins>
 
-Execute the script with cluster name as an argument
+Execute the script with cluster name and Nirmata URL as arguments
 
 ```sh
-root@ip-172-31-81-194:~/npm/nirmata-scripts/api/addcluster-npm# ./addcluster.sh kindtest24
+root@ip-172-31-81-194:~/npm/nirmata-scripts/api/addcluster-npm# ./addcluster.sh kindtest24 https://nirmata.io 
+
+Enter the Nirmata API token:
 
 Cluster added to NPM successfully
 ```
