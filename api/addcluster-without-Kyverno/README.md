@@ -16,7 +16,7 @@ error: unable to recognize "nirmata-kube-controller-testcluster14.yaml": no matc
 
 <ins>**Usage:**</ins>
 
-Execute the script with cluster name and Nirmata URL as arguments
+Execute the script with cluster name and Nirmata URL as arguments. Provide the Nirmata API key after the prompt. 
 
 ```sh
 root@ip-172-31-81-194:~/npm/nirmata-scripts/api/addcluster-npm# ./addcluster.sh kindtest24 https://nirmata.io 
