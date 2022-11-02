@@ -9,7 +9,7 @@ This script will require
 - A Kubernetes cluster to add in NPM
 
 <ins>**NOTE:**</ins>
-While executing the script, if you come across below error, it can safely ignored. 
+While executing the script, if you come across below error, it can be safely ignored. 
 
 error: unable to recognize "nirmata-kube-controller-testcluster14.yaml": no matches for kind "KyvernoOperator" in version "operator.kyverno.io/v1"
 
