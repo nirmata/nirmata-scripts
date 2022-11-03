@@ -17,11 +17,15 @@ $2 - Path to csv file consisting of namespaces, username and email (See example 
 
 <ins>**Note:**</ins> 
 
-The teams in Nirmata are created by appending a string `"ea1qa-team"` to the namespace. The catalogs are created by appending a string `"ea1qa-catalog"` to the namespace and the environments are created by appending a string `"ea1qa-team"` to the namespace. The cluster nickname `"ea1qa"` can be updated in the script if needed
+If user already exists then the script will not be able to add the user to the required team. This script only works for new users.
 
 ```sh
 
-$ ./create-teams-catalog-env-tshirt.sh https://nirmata.io sample-tshirt-size.csv calico-ipip4
+$ ./addusers-to-teams.sh https://nirmata.io sample-file.csv
+
+Enter the Nirmata URL:
+
+User sagar-devops5 added successfully to "random-ns-test-ea1qa-team"
 
 
 
