@@ -8,7 +8,9 @@ This script is used to create new users  in Nirmata using a csv file which consi
 
 Execute the script with the required arguments and provide the Nirmata API token for your tenant. 
 
-Required Arguments:
+<ins>**Required Arguments:**</ins>
+
+
 ```sh
 $1 - Nirmata URL
 $2 - Path to csv file consisting of namespaces, username and email (See example csv file for reference)
