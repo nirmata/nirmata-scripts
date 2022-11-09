@@ -1,4 +1,4 @@
-This script is used to create new users and add them to teams in Nirmata using a csv file which consists of a namespaces, usernames and email addresses
+This script is used to create new users  in Nirmata using a csv file which consists of a namespaces, usernames and email addresses
 
 <ins>**Prerequisites:**</ins>
 
@@ -17,7 +17,7 @@ $2 - Path to csv file consisting of namespaces, username and email (See example 
 
 <ins>**Note:**</ins> 
 
-If user already exists then the script will not be able to add the user to the required team. This script only works for new users.
+If user already exists then the script will not create a user again.
 
 ```sh
 
