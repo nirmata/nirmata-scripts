@@ -19,8 +19,9 @@ cat $FILENAME | grep -v Name | cut -d "," -f 2- > $FILENAME.tmp2
 
 
 
-for user in $(cat $FILENAME.tmp2)
+for user in $(cat $FILENAME.tmp2 | sort | uniq)
 do
+        #set -x
         USER_EXISTS=""
         EMAIL=""
         USER=""
@@ -46,9 +47,11 @@ do
                   \"delete\": []
                 }"
                 if [[ $? = 0 ]]; then
-                        echo "\nUser \"$USER\" created successfully"
+                        echo "User \"$USER\" created successfully"
                 else
                         echo "Something went wrong when creating user \"$USER\""
                 fi
+        else
+                echo "User \"$USER\" already exists"
         fi
 done
