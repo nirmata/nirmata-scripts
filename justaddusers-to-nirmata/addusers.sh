@@ -36,7 +36,7 @@ do
                       \"role\": \"devops\",
                       \"name\": \"$USER\",
                       \"email\": \"$EMAIL\",
-                      \"identityProvider\": \"Local\",
+                      \"identityProvider\": \"SAML\",
                       \"teams\": [],
                       \"mfaEnabled\": false,
                       \"modelIndex\": \"User\",
