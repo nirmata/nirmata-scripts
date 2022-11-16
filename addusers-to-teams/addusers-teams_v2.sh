@@ -128,15 +128,9 @@ do
         cat $iuser-team-ids_all.txt | tr "\n" "," | sed 's/.$//' > temp_var.txt
         TEMP=""
         TEMP=$(cat temp_var.txt | head -1)
-        echo "TEMP: $TEMP"
+        echo -e "\nUser \"$iuser\" getting added to below team ids"
+        cat $iuser-team-ids_all.txt
 
-        #echo "temp2: $temp2"
-        # temp3=$(echo -n $temp2 | sed 's/.$//')
-        # echo "temp3: $temp3"
-        # temp4=$(echo $temp3 | cut -d "'" -f 2)
-        # echo "temp4: $temp4"
-        #temp5=$(echo -n $temp2 | sed 's/"/\"/g')
-        #echo "temp5: $temp5"
         curl -s -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Authorization: NIRMATA-API $TOKEN" -X POST "$NIRMATAURL/users/api/txn" -d "
                 {
           \"create\": [],
@@ -149,5 +143,10 @@ do
             }
           ],
           \"delete\": []
-        }"
+        }" 1> /dev/null
+        if [[ $? = 0 ]]; then
+                echo "User \"$iuser\" added to teams successfully"
+        else
+                echo "Something went wrong when adding \"$iuser\" to teams"
+        fi
 done
