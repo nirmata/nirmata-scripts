@@ -15,13 +15,9 @@ $2 - Path to csv file consisting of namespaces, username and email (See example 
 
 ```
 
-<ins>**Note:**</ins> 
-
-If user already exists then the script will not be able to add the user to the required team. This script only works for new users.
-
 ```sh
 
-[root@nibr1 tmp]# ./script_to_use.sh https://nirmata.io sample-file.csv
+[root@nibr1 tmp]# ./addusers-teams_v2.sh https://nirmata.io sample-file.csv
 
 Enter the Nirmata API token:
 
