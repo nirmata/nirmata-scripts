@@ -29,7 +29,7 @@ rm -f *.txt *.tmp*
 echo -e "\nEnter the Nirmata API token: \n"
 read -s TOKEN
 
-TENANT_ID=$(curl -s -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Authorization: NIRMATA-API $TOKEN" -X GET "https://www.nirmata.io/users/api/tenant?fields=id" | jq '.[].id' | sed "s/\"//g")
+TENANT_ID=$(curl -s -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Authorization: NIRMATA-API $TOKEN" -X GET "$NIRMATAURL/users/api/tenant?fields=id" | jq '.[].id' | sed "s/\"//g")
 
 cat $FILENAME | grep -v Name | cut -d "," -f 1 > $FILENAME.tmp1
 cat $FILENAME | grep -v Name | cut -d "," -f 2- > $FILENAME.tmp2
