@@ -1,4 +1,4 @@
-This script is used to create teams, catalogs and environments in Nirmata using a file which consists of a list of namespaces.
+This script is used to get resourceQuota (Used and limit) information for all environments in a tenant that have resourceQuota defined. 
 
 <ins>**Prerequisites:**</ins>
 
@@ -11,29 +11,22 @@ Execute the script with the required arguments and provide the Nirmata API token
 Required Arguments:
 ```sh
 $1 - Nirmata URL
-$2 - Path to file consisting of namespaces
-$3 - Cluster Name
 ```
-
-<ins>**Note:**</ins> 
-
-The resources in Nirmata are created by appending a string "ea1qa" to the namespace. This can be updated in the script if needed. 
 
 ```sh
 
-$ ./create-teams-catalog-env.sh https://nirmata.io namespaces.txt calico-ipip4
+root@ip-172-31-81-194:~# ./script.sh https://nirmata.io
 
 Enter the Nirmata API token:
 
-Team "test-namespace1-ea1qa" already exists
-Team "test-namespace2-ea1qa" already exists
-Team "test-namespace3-ea1qa" already exists
-Catalog "test-namespace1-ea1qa" already exists
-Catalog "test-namespace2-ea1qa" already exists
-Catalog "test-namespace3-ea1qa" already exists
-Environment "test-namespace1-ea1qa" created successfully
-Environment "test-namespace2-ea1qa" created successfully
-Environment "test-namespace3-ea1qa" created successfully
+------------------------------------------------------------------------------------------------------------------------
+ENV_NAME                                 CLUSTER_NAME                   CPU_LIMIT  CPU_USED   MEMORY_LIMIT    MEMORY_USED
+------------------------------------------------------------------------------------------------------------------------
+demo-env-new                             demo-cluster                   4          500m       8Gi             512Mi
+sada                                     demo-cluster                   4          0          8Gi             0
+helm-demo                                demo-cluster                   4          0          8Gi             0
+environment-1                            demo-cluster                   8          750m       16Gi            768Mi
+------------------------------------------------------------------------------------------------------------------------
 
 
 ```
