@@ -1,0 +1,86 @@
+#!/bin/bash
+#Delete Files if exisits
+rm -rf namesapce.txt || true
+rm -rf filter_names.txt || true
+rm -rf appdetails.txt || true
+
+#Create Empty File
+touch appdetails.txt
+touch namesapce.txt
+touch filter_names.txt
+
+# Get all namespaces
+kubectl get ns > namesapce.txt
+
+# Filter Names from output
+awk '{$2=$3=""; print $0}' namesapce.txt | sed '1d' > filter_namesapce.txt
+
+# Set variables to zero
+cpuUsage=0
+memUsage=0
+appNumber=1
+
+# For Loop Namespace
+for namespace in `cat filter_namesapce.txt`
+
+do
+echo "-----------------------------------------" >> appdetails.txt
+echo $namespace "Namespace Analytics">> appdetails.txt
+#Get pod details under namespace
+kubectl get pods -n $namespace | awk '{print $1}' | sed '1d' > app.txt
+
+
+# For Loop Apps in a Namespace
+for app in `cat app.txt`
+do
+#check pod running
+pm=$(kubectl get pod $app -n $namespace | sed '1d' | awk '{print $3}')
+if [[ "$pm" != "Running" ]]; then
+continue
+fi
+
+echo "App #"$appNumber >> appdetails.txt
+appNumber=$((appNumber+1))
+#Get request and limit of pod
+kubectl get pod $app -n $namespace --output=custom-columns="NAME:.metadata.name,REQUEST_CPU:.spec.containers[].resources.requests.cpu,REQUEST_MEMORY:.spec.containers[].resources.requests.memory,LIMIT_CPU:.spec.containers[].resources.limit.cpu,LIMIT_MEMORY:.spec.containers[].resources.limit.memory" >> appdetails.txt
+#Get pod current usage
+kubectl top pod $app -n $namespace >> appdetails.txt
+
+#Calculate current resource usage of namesapce
+cpuUsage=`expr $cpuUsage + $(kubectl top pod $app -n $namespace | awk '{print $2}' | sed '1d' | sed 's/.\{1\}$//')`
+memUsage=`expr $memUsage + $(kubectl top pod $app -n $namespace | awk '{print $3}' | sed '1d' | sed 's/.\{2\}$//')`
+
+echo "+++++++++" >> appdetails.txt
+
+done
+echo "Current NS CPU Usage: $cpuUsage" >> appdetails.txt
+echo "Current NS MEM Usage: $memUsage" >> appdetails.txt
+
+#Check resource quota Enabled
+checkrq=$(kubectl get resourcequota -n $namespace | wc -l | sed '/^$/d')
+if [ $checkrq == 2 ]
+then
+   echo "Resource quota Enabled for $namespace" >> appdetails.txt
+   echo "$(kubectl get resourcequota -n $namespace)" >> appdetails.txt
+else
+    echo "Resource quota not found for $namespace" >> appdetails.txt
+fi
+
+#Check Limit Range Enabled
+checklimitrange=$(kubectl get limitrange -n $namespace | wc -l | sed '/^$/d')
+if [ $checklimitrange == 2 ]
+then
+   echo "Limit Range Enabled for $namespace" >> appdetails.txt
+   echo "$(kubectl get limitrange -n $namespace)" >> appdetails.txt
+else
+    echo "limitrange not found for $namespace" >> appdetails.txt
+fi
+
+#Setting variable to Zero for next iteration
+cpuUsage=0
+memUsage=0
+appNumber=1
+
+echo -e '\n' >> appdetails.txt
+
+done
