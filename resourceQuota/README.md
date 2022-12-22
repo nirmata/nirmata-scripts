@@ -15,7 +15,7 @@ $1 - Nirmata URL
 
 ```sh
 
-root@ip-172-31-81-194:~# ./script.sh https://nirmata.io
+root@ip-172-31-81-194:~# ./check-resourceQuota.sh https://nirmata.io
 
 Enter the Nirmata API token:
 
