@@ -5,6 +5,11 @@ Variables that can be changed:
 - Cluster name
 - VPC CIDR
 
+Prerequisites:
+- Terraform
+- aws iam authenticator
+- aws cli configured
+
 Usage: 
 
 terraform init
@@ -12,3 +17,7 @@ terraform init
 terraform plan
 
 terraform apply --auto-approve
+
+Once the cluster is created, run below command to get access to the EKS cluster using kubectl 
+
+terraform output -raw kubeconfig > ~/.kube/config 
