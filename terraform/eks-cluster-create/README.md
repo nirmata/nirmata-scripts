@@ -12,11 +12,15 @@ Variables that can be changed:
 
 <ins>**Usage:**</ins>
 
+```sh 
+
 terraform init
 
 terraform plan
 
 terraform apply --auto-approve
+
+```
 
 Once the cluster is created, run below command to get access to the EKS cluster using kubectl 
 
