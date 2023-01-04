@@ -24,4 +24,4 @@ terraform apply --auto-approve
 
 Once the cluster is created, run below command to get access to the EKS cluster using kubectl 
 
-```sh terraform output -raw kubeconfig > ~/.kube/config  ```
+`terraform output -raw kubeconfig > ~/.kube/config`
