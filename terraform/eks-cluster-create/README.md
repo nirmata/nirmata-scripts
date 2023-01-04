@@ -10,7 +10,7 @@ Variables that can be changed:
 - aws iam authenticator
 - aws cli configured
 
-<ins>**Usage**,/ins>
+<ins>**Usage:**</ins>
 
 terraform init
 
