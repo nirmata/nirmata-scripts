@@ -5,7 +5,7 @@ Variables that can be changed:
 - Cluster name
 - VPC CIDR
 
-Prerequisites:
+<ins>**Prerequisites:**</ins>
 - Terraform
 - aws iam authenticator
 - aws cli configured
