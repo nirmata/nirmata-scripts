@@ -1,3 +1,1 @@
-# nirmata-scripts
-
-This repository consists of automation scripts for nirmata
+# script to send an alert when Kubernetes certificates expire a month in advance
