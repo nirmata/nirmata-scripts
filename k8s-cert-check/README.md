@@ -3,4 +3,4 @@
 <ins>**Usage:**</ins>
 - Make sure you have installed mail package
 - Command to install:  yum install mailx -y
-- In script, Replace <Receiver-mail> with Receivers Mail ID
+- In script, Replace "<Receiver-mail>" with Receivers Mail ID
