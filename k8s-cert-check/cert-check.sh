@@ -12,7 +12,7 @@ echo "Number of days left to expire: $DAYS_LEFT"
 WARNDAYS=30
 if [ "${DAYS_LEFT}" -le "${WARNDAYS}" ]; then
    #     echo "The cert will expire soon!"
-        echo '"Hi, k8s certs is going to expire soon on production."' | mail -r "prod" -s "k8s certs will be expire soon :  Prod" "anudeep.nalla@nirmata.com" # Action if true
+        echo '"Hi, k8s certs is going to expire soon on production."' | mail -r "prod" -s "k8s certs will be expire soon :  Prod" "<Receiver-Email>" # Action if true
 else
         echo "Looks good till now!"
 fi
