@@ -1,0 +1,35 @@
+# Setup SSHD
+Get-WindowsCapability -Online | Where-Object Name -like 'OpenSSH*'
+Add-WindowsCapability -Online -Name OpenSSH.Client~~~~0.0.1.0
+Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
+Start-Service sshd
+Set-Service -Name sshd -StartupType 'Automatic'
+Install-Module -Name OpenSSHUtils -RequiredVersion 1.0.0.1 -SkipPublisherCheck -Scope AllUsers -Force
+Get-Module -ListAvailable | ? Name -like '*OpenSSHUtils*'
+
+# Install Docker
+powershell
+Install-Module DockerMsftProvider -Force
+Install-Package Docker -ProviderName DockerMsftProvider -Force
+(Install-WindowsFeature Containers).RestartNeeded
+Restart-Computer
+
+# Install Commands 
+
+# Create directory 
+mkdir c:\k
+
+# Copy Kubeconfig file to this folder
+Start-BitsTransfer https://raw.githubusercontent.com/swapnil-nirmata/windows-nodes/main/kubeconfig
+
+# Copy Script for Worker node addition
+Start-BitsTransfer https://raw.githubusercontent.com/swapnil-nirmata/windows-nodes/main/Windows-Setup-V1-21.ps1
+
+# Ansbile Pre-req
+Start-Bitstransfer https://raw.githubusercontent.com/swapnil-nirmata/windows-nodes/main/ARCHIVES/ansible-prereq.ps1
+
+#OBSOLETE
+.\PrepareNode.ps1 -KubernetesVersion v1.23.3 -ContainerRuntime containerD
+# Get Chocolatey
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString(‘https://chocolatey.org/install.ps1’))
+Start-BitsTransfer https://raw.githubusercontent.com/swapnil-nirmata/windows-nodes/main/Windows-setup.ps1
