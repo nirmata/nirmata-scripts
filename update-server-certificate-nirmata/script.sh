@@ -2,6 +2,7 @@ SECRET=$1
 NAMESPACE=$2
 SERVER_CRT=$3
 SERVER_KEY=$4
+URL=$5
 
 #Check certificates are present
 if [[ -f "$SERVER_CRT" && -f "$SERVER_KEY" ]]; 
@@ -9,6 +10,25 @@ then
   echo "cert files are present"
 else
   echo "cert files not present"
+  exit 1
+fi
+
+#Check Domain name in cert
+CERT_DOMAIN_NAME=$(openssl x509 -noout -subject -in  $SERVER_CRT | sed -e 's/^subject.*CN=\([a-zA-Z0-9\.\-]*\).*$/\1/')
+if [ $URL = $CERT_DOMAIN_NAME ]
+then
+    echo "domain name is correct on certificate"
+else
+    echo "domain name mismatch. Exiting"
+    exit 1
+fi
+
+# Check certificate expiry days
+if openssl x509 -checkend 5184000 -noout -in $SERVER_CRT
+then
+  echo "Certificate is good for next 60 day!"
+else
+  echo "Certificate has expired or will do so within 60 days!"
   exit 1
 fi
 
@@ -60,3 +80,18 @@ if [ "$?" -ne "0" ]; then
 else
   echo "New secret created Successfully"
 fi
+
+#Restart haproxy pods
+HAPROXY_PODS=$(kubectl get pods -n default | grep haproxy | awk '{print $1}')
+for POD_NAME in $HAPROXY_PODS
+do
+    kubectl delete pod $POD_NAME -n $NAMESPACE
+    if [ "$?" -ne "0" ]; then
+        echo "pod deletion failed"
+        exit 1
+    else
+        sleep 10
+    fi
+done
+
+echo "pod restart completed"
