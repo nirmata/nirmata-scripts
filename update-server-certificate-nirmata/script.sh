@@ -77,7 +77,7 @@ else
 fi
 
 #Restart haproxy pods
-HAPROXY_PODS=$(kubectl get pods -n default | grep haproxy | awk '{print $1}')
+HAPROXY_PODS=$(kubectl get pods -n $NAMESPACE | grep haproxy | awk '{print $1}')
 for POD_NAME in $HAPROXY_PODS
 do
     kubectl delete pod $POD_NAME -n $NAMESPACE
