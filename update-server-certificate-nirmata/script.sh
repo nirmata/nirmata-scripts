@@ -18,6 +18,7 @@ CERT_DOMAIN_NAME=$(openssl x509 -noout -subject -in  $SERVER_CRT | sed -e 's/^su
 if [ $URL = $CERT_DOMAIN_NAME ]
 then
     echo "domain name is correct on certificate"
+    sleep 2
 else
     echo "domain name mismatch. Exiting"
     exit 1
@@ -27,19 +28,10 @@ fi
 if openssl x509 -checkend 5184000 -noout -in $SERVER_CRT
 then
   echo "Certificate is good for next 60 day!"
+  sleep 2
 else
   echo "Certificate has expired or will do so within 60 days!"
   exit 1
-fi
-
-#Check Namespace is present
-namespaceStatus=$(kubectl get ns $NAMESPACE -o json | jq .status.phase -r)
-if [ "$namespaceStatus" == "Active" ]
-then
-    echo "namespace is present"
-else
-   echo "namespace is not present"
-   exit 1
 fi
 
 #check secret is present
@@ -49,6 +41,7 @@ if [ "$?" -ne "0" ]; then
   exit 1
 else
   echo "secret $SECRET found in $NAMESPACE"
+  sleep 2
 fi
 
 #Backup Secret
@@ -58,6 +51,7 @@ if [ "$?" -ne "0" ]; then
   exit 1
 else
   echo "Backup Completed"
+  sleep 2
 fi
 
 #sleep for 5 seconds
@@ -79,6 +73,7 @@ if [ "$?" -ne "0" ]; then
   exit 1
 else
   echo "New secret created Successfully"
+  sleep 2
 fi
 
 #Restart haproxy pods
