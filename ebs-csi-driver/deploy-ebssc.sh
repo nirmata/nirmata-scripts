@@ -39,7 +39,7 @@ if [[ ! -z "$OIDC_ID" ]]; then
         sed -i "s/region-code/us-west-1/g" aws-ebs-csi-driver-trust-policy_temp.json
         sed -i "s/EXAMPLED539D4633E53DE1B71EXAMPLE/$OIDC_ID/g" aws-ebs-csi-driver-trust-policy_temp.json
 
-        CHECK_ROLE=$(aws iam list-roles | jq .Roles[].RoleName | sed "s;\";;g" | grep AmazonEKS_EBS_CSI_DriverRole_$1)
+        CHECK_ROLE=$(aws iam list-roles | jq .Roles[].RoleName | sed "s;\";;g" | grep -w AmazonEKS_EBS_CSI_DriverRole_$1)
 
         if [[ -z $CHECK_ROLE ]]; then
 
