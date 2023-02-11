@@ -11,7 +11,7 @@ CERT_DIFF=$DATE_DIFF
 let "DAYS_LEFT=$YEAR-$CERT_DIFF"
 echo "Number of days left to expire: $DAYS_LEFT"
 # Number of days in the warning threshhold
-WARNDAYS=365
+WARNDAYS=30
 if [ "${DAYS_LEFT}" -le "${WARNDAYS}" ]; then
    #     echo "The cert will expire soon!"
         echo '"Hi, k8s certs is going to expire soon on cluster named '$CLUSTER_NAME' in '$ENVIRONMENT' Environment"' | mail -r "Nirmata" -s "k8s certs will be expire soon :  '$ENVIRONMENT'" "<Receiver-Email>" # Action if true
