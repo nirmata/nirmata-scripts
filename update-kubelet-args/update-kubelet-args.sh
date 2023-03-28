@@ -1,19 +1,16 @@
-Enter the Nirmata API token:
-
-Kubelet arguments updated successfully
-
-Sagar@DESKTOP-VS85098 MINGW64 ~/Downloads/scripts/trinet/update-cgroup-driver
-$ cat update-cgroupfs.sh
 #!/usr/bin/bash
 
-if [[ $# != 2 ]]; then
-        echo -e "\n$0 <cluster-name> <Nirmata URL>\n"
+if [[ $# != 3 ]]; then
+        echo -e "\nUsage: \t$0 <cluster-name> <Nirmata URL> <Kubelet-arg-to-add>\n"
+        echo -e "Example: $0 demo-cluster https://nirmata.io --cgroup-driver=systemd"
         exit 1
 fi
 
 CLUSTERNAME=$1
 
 NIRMATAURL=$2
+
+KUBELETARGS=$3
 
 echo -e "\nEnter the Nirmata API token: \n"
 read -s TOKEN
@@ -31,7 +28,7 @@ CLUSTERENV_VAR=$(curl -s -H "Accept: application/json, text/javascript, */*; q=0
 
 VALUE_TEMP=$(curl -s -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Authorization: NIRMATA-API $TOKEN" -X GET "$NIRMATAURL/config/api/environment/$CLUSTERENV/environmentVariables?fields=value,id,key" 2>&1 | jq ".[] | select( .key == \"KUBELET_ARGS\" ).value" | sed "s/\"//g")
 
-VALUE="$VALUE_TEMP --cgroup-driver=systemd"
+VALUE="$VALUE_TEMP $KUBELETARGS"
 
 curl -s -o /dev/null -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Authorization: NIRMATA-API $TOKEN" -X POST "$NIRMATAURL/config/api/txn" -d "
 
