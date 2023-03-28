@@ -1,6 +1,6 @@
 
 
-This script is used to create teams, catalogs and environments in Nirmata using a file which consists of a list of namespaces.
+This script is used to update the kubelet arguments of Nirmata managed cluster in Nirmata
 
 <ins>**Prerequisites:**</ins>
 
@@ -12,9 +12,9 @@ Execute the script with the required arguments and provide the Nirmata API token
 
 Required Arguments:
 ```sh
-$1 - Nirmata URL
-$2 - Path to file consisting of namespaces
-$3 - Cluster Name
+$1 - cluster name
+$2 - Nirmata URL
+$3 - Kubelet argument to add
 ```
 
 <ins>**Note:**</ins> 
