@@ -19,7 +19,7 @@ $3 - Kubelet argument to add
 
 ```sh
 
- $ ./update-cgroupfs.sh cluster-containerd-rhel https://nirmata.io --cgroup-driver=systemd
+ $ ./update-kubelet-args.sh cluster-containerd-rhel https://nirmata.io --cgroup-driver=systemd
 
 Enter the Nirmata API token:
 
