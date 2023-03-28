@@ -17,18 +17,13 @@ $2 - Nirmata URL
 $3 - Kubelet argument to add
 ```
 
-<ins>**Note:**</ins> 
-
-The resources in Nirmata are created by appending a string "ea1qa" to the namespace. This can be updated in the script if needed. 
-
 ```sh
 
-  ./update-cgroupfs.sh cluster-containerd-rhel https://nirmata.io
+ $ ./update-cgroupfs.sh cluster-containerd-rhel https://nirmata.io --cgroup-driver=systemd
 
 Enter the Nirmata API token:
 
 Kubelet arguments updated successfully
-
 
 
 ```
