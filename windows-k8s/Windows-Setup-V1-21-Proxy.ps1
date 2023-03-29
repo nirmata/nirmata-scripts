@@ -7,7 +7,7 @@ Param(
     [parameter(Mandatory = $false)] $Release = "1.21.5",
     [parameter(Mandatory = $false)] $NanosServerImageTag = "10.0.17763.802",
     [parameter(Mandatory = $false)] $ServerCoreImageTag = "ltsc2019",
-    [parameter(Mandatory = $false)] $webproxy = "http://nibr-proxy.global.nibr.novartis.net:2011",
+    [parameter(Mandatory = $false)] $webproxy = "<Add Proxy>",
     [parameter(Mandatory = $false)] [switch] $Reset=$false
 )
 
@@ -30,7 +30,7 @@ $Global:InterfaceName=$InterfaceName
 $Global:ClusterCidr=$ClusterCIDR
 #$Global:KubeletFeatureGates="RotateKubeletClientCertificate=true"
 $Global:KubeproxyFeatureGates="WinOverlay=true,IPv6DualStack=false"
-$Global:webproxy = "http://nibr-proxy.global.nibr.novartis.net:2011"
+$Global:webproxy = "http://<Add Proxy>"
 # Docker is installed ?
 
 function SetGlobals()
@@ -52,7 +52,7 @@ function SetGlobals()
 
 function Set-Proxy {
     param(
-        $webproxy = "http://nibr-proxy.global.nibr.novartis.net:2011"
+        $webproxy = "http://<Add Proxy>"
 
     )
     
