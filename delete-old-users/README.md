@@ -166,5 +166,6 @@ No of days since last login: 0
 
 Deleted Users list:
 -------------------
+Jim - Gmail
 
 ```
