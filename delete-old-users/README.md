@@ -1,6 +1,6 @@
 
 
-This script is used to update the kubelet arguments of Nirmata managed cluster in Nirmata
+This script is used to delete the users from Nirmata who have not logged into Nirmata for more than 365 days. 
 
 <ins>**Prerequisites:**</ins>
 
@@ -12,14 +12,12 @@ Execute the script with the required arguments and provide the Nirmata API token
 
 Required Arguments:
 ```sh
-$1 - cluster name
-$2 - Nirmata URL
-$3 - Kubelet argument to add
+$1 - Nirmata URL
 ```
 
 ```sh
 
-[root@saas delete-old-users]# ./delete-old-users_v2.sh https://nirmata.io
+[root@saas delete-old-users]# ./delete-old-users.sh https://nirmata.io
 Enter the Nirmata API token:
 
 
