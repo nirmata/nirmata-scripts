@@ -38,7 +38,8 @@ do
             echo "No of days since last login: $No_of_days_since_last_login"
             if [[ $No_of_days_since_last_login -gt $NOOFDAYS ]]; then
 
-                echo -e "\nDeleting user $USERNAME from Nirmata..." | tee -a deleted-users.txt
+                echo "$USERNAME" | tee -a deleted-users.txt
+                echo -e "\nDeleting user $USERNAME from Nirmata..."
                 curl -s -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Authorization: NIRMATA-API $TOKEN" -X POST "$NIRMATAURL/users/api/txn" -d "
                 {
                 \"create\": [],
