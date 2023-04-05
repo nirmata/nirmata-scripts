@@ -6,6 +6,7 @@ if [[ $# != 1 ]]; then
 fi
 
 NIRMATAURL=$1
+NOOFDAYS=365
 
 echo -e "Enter the Nirmata API token: \n"
 read -s TOKEN
@@ -34,7 +35,7 @@ do
             #echo "time_diff: $time_diff"
             No_of_days_since_last_login=$(expr $time_diff / 86400)
             echo "No of days since last login: $No_of_days_since_last_login"
-            if [[ $No_of_days_since_last_login -gt 970 ]]; then
+            if [[ $No_of_days_since_last_login -gt $NOOFDAYS ]]; then
 
                 echo -e "\nDeleting user $USERNAME from Nirmata..." | tee -a deleted-users.txt
                 curl -s -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Authorization: NIRMATA-API $TOKEN" -X POST "$NIRMATAURL/users/api/txn" -d "
