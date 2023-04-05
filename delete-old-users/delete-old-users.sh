@@ -18,6 +18,7 @@ do
     #set -x
     LASTLOGIN=""
     USERNAME=""
+    target_timestamp=""
     LASTLOGIN=$(curl -s -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Authorization: NIRMATA-API $TOKEN" -X GET "$NIRMATAURL/users/api/User/${user%$'\r'}"  | jq -r ".lastLogin" | sed 's/,//g')
     USERNAME=$(curl -s -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Authorization: NIRMATA-API $TOKEN" -X GET "$NIRMATAURL/users/api/User/${user%$'\r'}"  | jq -r ".name")
     #echo
