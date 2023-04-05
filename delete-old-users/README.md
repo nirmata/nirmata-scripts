@@ -1,6 +1,6 @@
 
 
-This script is used to delete the users from Nirmata who have not logged into Nirmata for more than 365 days. 
+This script is used to delete the users from Nirmata who have not logged into Nirmata for more than 365 days (This parameter `NOOFDAYS` can be updated in the script if needed). 
 
 <ins>**Prerequisites:**</ins>
 
