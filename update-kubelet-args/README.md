@@ -4,7 +4,7 @@ This script is used to update the kubelet arguments of Nirmata managed cluster i
 
 <ins>**Prerequisites:**</ins>
 
-- Make sure `curl` and `jq` are installed on the machine where you are running this script
+- Make sure `curl` is installed on the machine where you are running this script
 
 <ins>**Usage:**</ins>
 
