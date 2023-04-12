@@ -47,9 +47,9 @@ else
     installjq
 fi
 
-if [[ $# != 3 ]]; then
-        echo -e "\nUsage: \t$0 <cluster-name> <Nirmata URL> <Kubelet-arg-to-add>\n"
-        echo -e "Example: $0 demo-cluster https://nirmata.io --cgroup-driver=systemd"
+if [[ $# != 2 ]]; then
+        echo -e "\nUsage: \t$0 <cluster-name> <Nirmata URL>\n"
+        echo -e "Example: $0 demo-cluster https://nirmata.io"
         exit 1
 fi
 
