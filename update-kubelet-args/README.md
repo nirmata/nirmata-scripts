@@ -1,6 +1,6 @@
 
 
-This script is used to update the kubelet arguments of Nirmata managed cluster in Nirmata
+This script is used to add the new arguments to kubelet in a Nirmata managed cluster in Nirmata. The script cannot be used to update the existing the kubelet arguments. 
 
 <ins>**Prerequisites:**</ins>
 
