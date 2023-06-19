@@ -26,6 +26,9 @@ else
 	kubectl get deployment -n $namespace3 | grep -iv 'Name' | awk '{print $1}' | xargs kubectl --kubeconfig=$kubeconfig delete deployment -n $namespace3
     kubectl get svc -n $namespace3 | grep -iv 'Name' | awk '{print $1}' | xargs kubectl --kubeconfig=$kubeconfig delete svc -n $namespace3
     kubectl get ClusterRoleBinding -A | grep -i '^nirmata-' | awk '{print $1}' | xargs kubectl --kubeconfig=$kubeconfig delete ClusterRoleBinding
+	kubectl get ClusterRoleBinding -A | grep -i '^nirmata:' | awk '{print $1}' | xargs kubectl --kubeconfig=$kubeconfig delete ClusterRoleBinding
+	kubectl get ClusterRole -A | grep -i '^nirmata-' | awk '{print $1}' | xargs kubectl --kubeconfig=$kubeconfig delete ClusterRole
+	kubectl get ClusterRole -A | grep -i '^nirmata:' | awk '{print $1}' | xargs kubectl --kubeconfig=$kubeconfig delete ClusterRole
     getns=$(kubectl get ns nirmata 2>&1)
     delns=$(echo $getns | grep NotFound)
     echo $getns | grep NotFound
