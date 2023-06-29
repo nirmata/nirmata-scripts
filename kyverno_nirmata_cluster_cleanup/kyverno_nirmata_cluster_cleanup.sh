@@ -29,12 +29,33 @@ else
 
     echo "==================================================="
 
+        # Delete policyset resources with retries
+        echo "Deleting policyset resources"
+        retries=0
+        while [[ $(kubectl --kubeconfig="$kubeconfig" get policyset -n "$namespace" -o name) && $retries -lt 3 ]]; do
+            kubectl --kubeconfig="$kubeconfig" delete policyset --all --force --grace-period=0 -n "$namespace"
+            sleep 5
+            ((retries++))
+        done
+
+        if [[ $(kubectl --kubeconfig="$kubeconfig" get policyset -n "$namespace" -o name) ]]; then
+            echo "Failed to delete policyset resources in namespace '$namespace'."
+            exit 1
+        fi
+        echo "Deleted policyset resources in namespace '$namespace'"
+
+        echo "Remaining policyset resources:"
+        kubectl --kubeconfig="$kubeconfig" get policyset -n "$namespace" -o name || echo "No resources found."
+
+        echo "==================================================="
+
+
 
     # Delete clusterpolicy resources with retries
         echo "Deleting clusterpolicy resources"
         retries=0
         while [[ $(kubectl --kubeconfig="$kubeconfig" get clusterpolicy -n "$namespace" -o name) && $retries -lt 3 ]]; do
-            kubectl --kubeconfig="$kubeconfig" delete clusterpolicy --all -n "$namespace"
+            kubectl --kubeconfig="$kubeconfig" delete clusterpolicy --all --force --grace-period=0 -n "$namespace"
             sleep 5
             ((retries++))
         done
@@ -59,7 +80,7 @@ else
         # echo "$crds" | xargs -I {} kubectl --kubeconfig="$kubeconfig" patch  {} -p '{"spec":{"finalizers":[]}}' --type=merge
         retries=0
         while [[ -n $crds && $retries -lt 3 ]]; do
-            echo "$crds" | xargs kubectl --kubeconfig="$kubeconfig" delete
+            echo "$crds" | xargs kubectl --kubeconfig="$kubeconfig" delete --force --grace-period=0
             sleep 5
             crds=$(kubectl --kubeconfig="$kubeconfig" get customresourcedefinition -o name | grep -i "$namespace")
             ((retries++))
@@ -81,7 +102,7 @@ else
         retries=0
         while [[ -n $crds && $retries -lt 3 ]]; do
 
-            echo "$crds" | xargs kubectl --kubeconfig="$kubeconfig" delete
+            echo "$crds" | xargs kubectl --kubeconfig="$kubeconfig" delete --force --grace-period=0
             sleep 5
             crds=$(kubectl --kubeconfig="$kubeconfig" get customresourcedefinition -o name | grep -i "wgpolicy")
             ((retries++))
@@ -93,6 +114,8 @@ else
         echo "Remaining CustomResourceDefinitions:"
         kubectl --kubeconfig="$kubeconfig" get customresourcedefinition -o name | grep -i "wgpolicy" || echo "No resources found."
 
+    echo "==================================================="
+
         # Delete ClusterRoles
         echo "Deleting ClusterRoles"
         cluster_roles=$(kubectl --kubeconfig="$kubeconfig" get clusterrole -o name | grep -i "$namespace")
@@ -100,7 +123,7 @@ else
             echo "ClusterRoles found. Deleting..."
             retries=0
             while [[ -n $cluster_roles && $retries -lt 3 ]]; do
-                echo "$cluster_roles" | xargs kubectl --kubeconfig="$kubeconfig" delete
+                echo "$cluster_roles" | xargs kubectl --kubeconfig="$kubeconfig" delete --force --grace-period=0
                 sleep 5
                 cluster_roles=$(kubectl --kubeconfig="$kubeconfig" get clusterrole -o name | grep -i "$namespace")
                 ((retries++))
@@ -125,7 +148,7 @@ else
             echo "ClusterRoleBindings found. Deleting..."
             retries=0
             while [[ -n $cluster_role_bindings && $retries -lt 3 ]]; do
-                echo "$cluster_role_bindings" | xargs kubectl --kubeconfig="$kubeconfig" delete
+                echo "$cluster_role_bindings" | xargs kubectl --kubeconfig="$kubeconfig" delete --force --grace-period=0
                 sleep 5
                 cluster_role_bindings=$(kubectl --kubeconfig="$kubeconfig" get clusterrolebinding -o name | grep -i "$namespace")
                 ((retries++))
@@ -150,7 +173,7 @@ else
             echo "MutatingWebhookConfigurations found. Deleting..."
             retries=0
             while [[ -n $mutating_webhook_configs && $retries -lt 3 ]]; do
-                echo "$mutating_webhook_configs" | xargs kubectl --kubeconfig="$kubeconfig" delete
+                echo "$mutating_webhook_configs" | xargs kubectl --kubeconfig="$kubeconfig" delete --force --grace-period=0
                 sleep 5
                 mutating_webhook_configs=$(kubectl --kubeconfig="$kubeconfig" get mutatingwebhookconfiguration -o name | grep -i "$namespace")
                 ((retries++))
@@ -175,7 +198,7 @@ else
             echo "ValidatingWebhookConfigurations found. Deleting..."
             retries=0
             while [[ -n $validating_webhook_configs && $retries -lt 3 ]]; do
-                echo "$validating_webhook_configs" | xargs kubectl --kubeconfig="$kubeconfig" delete
+                echo "$validating_webhook_configs" | xargs kubectl --kubeconfig="$kubeconfig" delete --force --grace-period=0
                 sleep 5
                 validating_webhook_configs=$(kubectl --kubeconfig="$kubeconfig" get validatingwebhookconfiguration -o name | grep -i "$namespace")
                 ((retries++))
@@ -199,7 +222,7 @@ else
         if [[ -n $statefulsets ]]; then
             retries=0
             while [[ -n $statefulsets && $retries -lt 3 ]]; do
-                echo "$statefulsets" | xargs kubectl --kubeconfig="$kubeconfig" delete -n "$namespace"
+                echo "$statefulsets" | xargs kubectl --kubeconfig="$kubeconfig" delete --force --grace-period=0 -n "$namespace"
                 sleep 5
                 statefulsets=$(kubectl --kubeconfig="$kubeconfig" get statefulset -n "$namespace" -o name)
                 ((retries++))
@@ -223,7 +246,7 @@ else
         if [[ -n $daemonsets ]]; then
             retries=0
             while [[ -n $daemonsets && $retries -lt 3 ]]; do
-                echo "$daemonsets" | xargs kubectl --kubeconfig="$kubeconfig" delete -n "$namespace"
+                echo "$daemonsets" | xargs kubectl --kubeconfig="$kubeconfig" delete --force --grace-period=0 -n "$namespace"
                 sleep 5
                 daemonsets=$(kubectl --kubeconfig="$kubeconfig" get daemonset -n "$namespace" -o name)
                 ((retries++))
@@ -247,7 +270,7 @@ else
         if [[ -n $deployments ]]; then
             retries=0
             while [[ -n $deployments && $retries -lt 3 ]]; do
-                echo "$deployments" | xargs kubectl --kubeconfig="$kubeconfig" delete -n "$namespace"
+                echo "$deployments" | xargs kubectl --kubeconfig="$kubeconfig" delete --force --grace-period=0 -n "$namespace"
                 sleep 5
                 deployments=$(kubectl --kubeconfig="$kubeconfig" get deployment -n "$namespace" -o name)
                 ((retries++))
@@ -271,7 +294,7 @@ else
         if [[ -n $services ]]; then
             retries=0
             while [[ -n $services && $retries -lt 3 ]]; do
-                echo "$services" | xargs kubectl --kubeconfig="$kubeconfig" delete -n "$namespace"
+                echo "$services" | xargs kubectl --kubeconfig="$kubeconfig" delete --force --grace-period=0 -n "$namespace"
                 sleep 5
                 services=$(kubectl --kubeconfig="$kubeconfig" get service -n "$namespace" -o name)
                 ((retries++))
@@ -295,7 +318,7 @@ else
         if [[ -n $pods ]]; then
             retries=0
             while [[ -n $pods && $retries -lt 3 ]]; do
-                echo "$pods" | xargs kubectl --kubeconfig="$kubeconfig" delete -n "$namespace"
+                echo "$pods" | xargs kubectl --kubeconfig="$kubeconfig" delete --force --grace-period=0 -n "$namespace"
                 sleep 5
                 pods=$(kubectl --kubeconfig="$kubeconfig" get pod -n "$namespace" -o name)
                 ((retries++))
@@ -316,6 +339,7 @@ else
 
 
         # Wait for resources to be deleted
+       echo  "Waiting for resources to be deleted in namespace '$namespace'."
         while kubectl --kubeconfig="$kubeconfig" get pod -n "$namespace" 2>&1 | grep Terminating; do
             sleep 5
         done
@@ -346,12 +370,12 @@ else
             retries=3
             while [[ $retries -gt 0 ]]; do
                 # Delete the namespace
-                kubectl --kubeconfig="$kubeconfig" delete ns "$namespace" --wait=true 2>/dev/null
+                kubectl --kubeconfig="$kubeconfig" delete ns "$namespace" --force --grace-period=0 --wait=true 2>/dev/null
 
                 # Check if namespace still exists
                 namespace_status=$(kubectl --kubeconfig="$kubeconfig" get namespace "$namespace" -o jsonpath='{.status.phase}' 2>/dev/null)
                 if [[ -z $namespace_status ]]; then
-                    echo "Namespace '$namespace' deleted successfully"
+                    echo "Namespace '$namespace' doesn't exist now"
                     break
                 fi
 
@@ -373,7 +397,7 @@ else
     echo "==================================================="
 
     # Delete secrets
-    kubectl --kubeconfig="$kubeconfig" get secret -A | grep helm | awk '{print $2}' | xargs kubectl --kubeconfig="$kubeconfig" delete secret
+    kubectl --kubeconfig="$kubeconfig" get secret -A | grep helm | awk '{print $2}' | xargs kubectl --kubeconfig="$kubeconfig" delete secret --force --grace-period=0
 
     echo "Kyverno and Nirmata-related resources are deleted from the cluster"
 
@@ -417,10 +441,5 @@ else
             fi
         done
     done
-
 fi
-
-    echo "==================================================="
-
-
-
+echo "==================================================="
