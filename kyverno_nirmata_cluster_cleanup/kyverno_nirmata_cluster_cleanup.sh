@@ -163,6 +163,31 @@ else
 
         echo "==================================================="
 
+        # Delete Kyverno ClusterRoles
+        echo "Deleting kyverno ClusterRoles"
+        cluster_roles=$(kubectl --kubeconfig="$kubeconfig" get clusterrole -o name | grep -i "kyverno")
+        if [[ -n $cluster_roles ]]; then
+            echo "ClusterRoles found. Deleting..."
+            retries=0
+            while [[ -n $cluster_roles && $retries -lt 3 ]]; do
+                echo "$cluster_roles" | xargs kubectl --kubeconfig="$kubeconfig" delete --force --grace-period=0
+                sleep 5
+                cluster_roles=$(kubectl --kubeconfig="$kubeconfig" get clusterrole -o name | grep -i "kyverno")
+                ((retries++))
+            done
+            if [[ -n $cluster_roles ]]; then
+                echo "Failed to delete ClusterRoles in namespace '$namespace'."
+                exit 1
+            fi
+            echo "Deleted ClusterRoles in namespace '$namespace'"
+        else
+            echo "Skipping ClusterRole deletion. No ClusterRoles found in namespace '$namespace'."
+        fi
+        echo "Remaining ClusterRoles:"
+        kubectl --kubeconfig="$kubeconfig" get clusterrole -o name | grep -i "kyverno" || echo "No resources found."
+
+        echo "==================================================="
+
         # Delete ClusterRoleBindings
         echo "Deleting ClusterRoleBindings"
         cluster_role_bindings=$(kubectl --kubeconfig="$kubeconfig" get clusterrolebinding -o name | grep -i "$namespace")
@@ -185,6 +210,31 @@ else
         fi
         echo "Remaining ClusterRoleBindings:"
         kubectl --kubeconfig="$kubeconfig" get clusterrolebinding -o name | grep -i "$namespace" || echo "No resources found."
+
+        echo "==================================================="
+
+        # Delete kyverno ClusterRoleBindings
+        echo "Deleting kyverno ClusterRoleBindings"
+        cluster_role_bindings=$(kubectl --kubeconfig="$kubeconfig" get clusterrolebinding -o name | grep -i "kyverno")
+        if [[ -n $cluster_role_bindings ]]; then
+            echo "ClusterRoleBindings found. Deleting..."
+            retries=0
+            while [[ -n $cluster_role_bindings && $retries -lt 3 ]]; do
+                echo "$cluster_role_bindings" | xargs kubectl --kubeconfig="$kubeconfig" delete --force --grace-period=0
+                sleep 5
+                cluster_role_bindings=$(kubectl --kubeconfig="$kubeconfig" get clusterrolebinding -o name | grep -i "kyverno")
+                ((retries++))
+            done
+            if [[ -n $cluster_role_bindings ]]; then
+                echo "Failed to delete ClusterRoleBindings in namespace '$namespace'."
+                exit 1
+            fi
+            echo "Deleted ClusterRoleBindings in namespace '$namespace'"
+        else
+            echo "Skipping ClusterRoleBinding deletion. No ClusterRoleBindings found in namespace '$namespace'."
+        fi
+        echo "Remaining ClusterRoleBindings:"
+        kubectl --kubeconfig="$kubeconfig" get clusterrolebinding -o name | grep -i "kyverno" || echo "No resources found."
 
         echo "==================================================="
 
@@ -213,6 +263,31 @@ else
 
         echo "==================================================="
 
+        # Delete kyverno MutatingWebhookConfigurations
+        echo "Deleting kyverno MutatingWebhookConfigurations"
+        mutating_webhook_configs=$(kubectl --kubeconfig="$kubeconfig" get mutatingwebhookconfiguration -o name | grep -i "kyverno")
+        if [[ -n $mutating_webhook_configs ]]; then
+            echo "MutatingWebhookConfigurations found. Deleting..."
+            retries=0
+            while [[ -n $mutating_webhook_configs && $retries -lt 3 ]]; do
+                echo "$mutating_webhook_configs" | xargs kubectl --kubeconfig="$kubeconfig" delete --force --grace-period=0
+                sleep 5
+                mutating_webhook_configs=$(kubectl --kubeconfig="$kubeconfig" get mutatingwebhookconfiguration -o name | grep -i "kyverno")
+                ((retries++))
+            done
+            if [[ -n $mutating_webhook_configs ]]; then
+                echo "Failed to delete MutatingWebhookConfigurations in namespace '$namespace'."
+                exit 1
+            fi
+            echo "Deleted MutatingWebhookConfigurations in namespace '$namespace'"
+        else
+            echo "Skipping MutatingWebhookConfiguration deletion. No MutatingWebhookConfigurations found in namespace '$namespace'."
+        fi
+        echo "Remaining MutatingWebhookConfigurations:"
+        kubectl --kubeconfig="$kubeconfig" get mutatingwebhookconfiguration -o name | grep -i "kyverno" || echo "No resources found."
+
+        echo "==================================================="
+
         # Delete ValidatingWebhookConfigurations
         echo "Deleting ValidatingWebhookConfigurations"
         validating_webhook_configs=$(kubectl --kubeconfig="$kubeconfig" get validatingwebhookconfiguration -o name | grep -i "$namespace")
@@ -223,6 +298,31 @@ else
                 echo "$validating_webhook_configs" | xargs kubectl --kubeconfig="$kubeconfig" delete --force --grace-period=0
                 sleep 5
                 validating_webhook_configs=$(kubectl --kubeconfig="$kubeconfig" get validatingwebhookconfiguration -o name | grep -i "$namespace")
+                ((retries++))
+            done
+            if [[ -n $validating_webhook_configs ]]; then
+                echo "Failed to delete ValidatingWebhookConfigurations in namespace '$namespace'."
+                exit 1
+            fi
+            echo "Deleted ValidatingWebhookConfigurations in namespace '$namespace'"
+        else
+            echo "Skipping ValidatingWebhookConfiguration deletion. No ValidatingWebhookConfigurations found in namespace '$namespace'."
+        fi
+        echo "Remaining ValidatingWebhookConfigurations:"
+        kubectl --kubeconfig="$kubeconfig" get validatingwebhookconfiguration -o name | grep -i "$namespace" || echo "No resources found."
+
+        echo "==================================================="
+
+        # Delete kyverno ValidatingWebhookConfigurations
+        echo "Deleting kyverno ValidatingWebhookConfigurations"
+        validating_webhook_configs=$(kubectl --kubeconfig="$kubeconfig" get validatingwebhookconfiguration -o name | grep -i "kyverno")
+        if [[ -n $validating_webhook_configs ]]; then
+            echo "ValidatingWebhookConfigurations found. Deleting..."
+            retries=0
+            while [[ -n $validating_webhook_configs && $retries -lt 3 ]]; do
+                echo "$validating_webhook_configs" | xargs kubectl --kubeconfig="$kubeconfig" delete --force --grace-period=0
+                sleep 5
+                validating_webhook_configs=$(kubectl --kubeconfig="$kubeconfig" get validatingwebhookconfiguration -o name | grep -i "kyverno")
                 ((retries++))
             done
             if [[ -n $validating_webhook_configs ]]; then
