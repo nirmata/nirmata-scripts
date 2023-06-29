@@ -528,12 +528,12 @@ else
     echo $CLUSTERID > clusterid_$CLUSTERNAME
 
     for clusterid in $(cat clusterid_$CLUSTERNAME); do
-        echo "Deleting cluster $CLUSTERNAME from Nirmata..."
+        echo "Removing cluster $CLUSTERNAME from Nirmata..."
         delete_response=$(curl -s -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Authorization: NIRMATA-API $TOKEN" -X DELETE "$NIRMATAURL/cluster/api/KubernetesCluster/$clusterid?action=remove")
 
         if [[ $? -eq 0 ]]; then
             echo "$delete_response"
-            echo "$CLUSTERNAME deletion request sent successfully"
+            echo "$CLUSTERNAME removal request sent successfully"
         fi
 
         # Wait until the cluster is completely removed
@@ -543,17 +543,17 @@ else
             cluster_exists=$(curl -s -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Authorization: NIRMATA-API $TOKEN" -X GET "$NIRMATAURL/cluster/api/KubernetesCluster/$clusterid")
 
             if [[ -z "$cluster_exists" ]]; then
-                echo "Cluster $CLUSTERNAME has been successfully deleted from Nirmata"
+                echo "Cluster $CLUSTERNAME has been successfully removed from Nirmata"
                 break
             elif [[ "$cluster_exists" == *"KubernetesCluster:$clusterid not found"* ]]; then
-                echo "Cluster $CLUSTERNAME not found. Assuming deletion is complete."
+                echo "Cluster $CLUSTERNAME not found. Assuming removal is complete."
                 break
             elif [[ $retries -lt 120 ]]; then  # Retry for up to 20 minutes (120 retries * 10 seconds = 20 minutes)
                 if [[ $elapsed_time -eq 0 || $elapsed_time -ge 300 ]]; then
-                    echo "Cluster Deletion is taking more time than usual. Please wait for deletion."
+                    echo "Cluster Removal is taking more time than usual. Please wait for removal."
                     elapsed_time=0
                 fi
-                echo "Cluster $CLUSTERNAME deletion is in progress..."
+                echo "Cluster $CLUSTERNAME removal is in progress..."
                 sleep 10  # Wait for 10 seconds before retrying
                 ((retries++))
                 ((elapsed_time+=10))
