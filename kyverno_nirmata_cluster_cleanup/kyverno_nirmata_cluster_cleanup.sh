@@ -519,7 +519,7 @@ else
     echo "==================================================="
 
     # Delete secrets
-    kubectl --kubeconfig="$kubeconfig" get secret -A | grep helm | awk '{print $2}' | xargs kubectl --kubeconfig="$kubeconfig" delete secret --force --grace-period=0
+    kubectl --kubeconfig="$kubeconfig" get secret -A | grep -i policies | awk '{print $2}' | xargs kubectl --kubeconfig="$kubeconfig" delete secret -n default --force --grace-period=0
 
     echo "Kyverno and Nirmata-related resources are deleted from the cluster"
 
