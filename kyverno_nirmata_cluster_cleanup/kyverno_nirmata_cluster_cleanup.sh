@@ -94,6 +94,28 @@ else
 
     echo "==================================================="
 
+        # Delete kyverno CustomResourceDefinitions 
+        echo "Deleting kyverno CustomResourceDefinitions"
+        crds=$(kubectl --kubeconfig="$kubeconfig" get customresourcedefinition -o name | grep -i "kyverno")
+        echo "$crds" | xargs -I {} kubectl --kubeconfig="$kubeconfig" patch {} -p '{"metadata":{"finalizers":[]}}' --type=merge
+        # echo "$crds" | xargs -I {} kubectl --kubeconfig="$kubeconfig" patch {} -p '{"spec":{"finalizers":[]}}' --type=merge
+        retries=0
+        while [[ -n $crds && $retries -lt 3 ]]; do
+
+            echo "$crds" | xargs kubectl --kubeconfig="$kubeconfig" delete --force --grace-period=0
+            sleep 5
+            crds=$(kubectl --kubeconfig="$kubeconfig" get customresourcedefinition -o name | grep -i "kyverno")
+            ((retries++))
+        done
+        if [[ -n $crds ]]; then
+            echo "Failed to delete CustomResourceDefinitions in namespace 'kyverno'."
+            exit 1
+        fi
+        echo "Remaining CustomResourceDefinitions:"
+        kubectl --kubeconfig="$kubeconfig" get customresourcedefinition -o name | grep -i "kyverno" || echo "No resources found."
+
+    echo "==================================================="
+
         # Delete wgpolicy CustomResourceDefinitions 
         echo "Deleting wgpolicy CustomResourceDefinitions"
         crds=$(kubectl --kubeconfig="$kubeconfig" get customresourcedefinition -o name | grep -i "wgpolicy")
