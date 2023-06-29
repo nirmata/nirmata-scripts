@@ -10,5 +10,5 @@ This script is used to cleanup Kyverno,Nirmata,Nirmata Cluster and its related r
 	- Nirmata-URL: URL of the Nirmata API
 	- namespace1: Name of the first namespace to be cleaned up (e.g., 'kyverno')
 	- namespace2...: Names of the additional namespaces to be cleaned up
-        - `Example`: `./kyverno_nirmata_cluster_cleanup.sh kubeconfig_path test-cluster <Nirmata-API-Token> https://www.nirmata.io  nirmata-kyverno-operator kyverno nirmata`
+      - `Example`: `./kyverno_nirmata_cluster_cleanup.sh <kubeconfig_path> <test-cluster> <Nirmata-API-Token> https://www.nirmata.io  nirmata-kyverno-operator kyverno nirmata`
 
