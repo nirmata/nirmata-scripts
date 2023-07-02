@@ -1,4 +1,48 @@
- #!/bin/bash
+#!/bin/bash
+
+installjq() {
+
+        # Check the operating system
+        if [[ "$(uname)" == "Darwin" ]]; then
+                # Mac OS X
+                brew install jq
+        elif [[ "$(expr substr $(uname -s) 1 5)" == "Linux" ]]; then
+                # Linux
+                if [[ -n "$(command -v yum)" ]]; then
+                        # CentOS, RHEL, Fedora
+                        sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+                        sudo yum install -y jq
+                elif [[ -n "$(command -v apt-get)" ]]; then
+                        # Debian, Ubuntu, Mint
+                        sudo apt-get update
+                        sudo apt-get install -y jq
+                elif [[ -n "$(command -v zypper)" ]]; then
+                        # OpenSUSE
+                        sudo zypper install -y jq
+                elif [[ -n "$(command -v pacman)" ]]; then
+                        # Arch Linux
+                        sudo pacman -S --noconfirm jq
+                else
+                        echo "Error: Unsupported Linux distribution."
+                        exit 1
+                fi
+        else
+                echo "Error: Unsupported operating system."
+                exit 1
+        fi
+
+        # Print the version of jq installed
+        jq --version
+}
+
+if [[ -n "$(command -v jq)" ]]; then
+    echo "jq is installed."
+    jq --version
+else
+    echo -e "\njq is not installed. Installing jq ...\n"
+    installjq
+    echo "jq is installed successfully"
+fi
 
 if [ $# -lt 5 ]; then
     echo "Usage: $0 kubeconfig clustername Nirmata-API-Token Nirmata-URL namespace1 [namespace2 ...]"
@@ -28,6 +72,18 @@ else
         echo "Deleting resources in namespace: $namespace"
 
     echo "==================================================="
+
+        # Uninstall best-practice-policies chart
+        echo "Uninstalling best-practice-policies chart..."
+        helm uninstall best-practice-policies -n default
+
+        # Uninstall pod-security-policies chart
+        echo "Uninstalling pod-security-policies chart..."
+        helm uninstall pod-security-policies -n default
+
+        # Uninstall kyverno chart
+        echo "Uninstalling kyverno chart..."
+        helm uninstall kyverno -n kyverno
 
         # Delete policyset resources with retries
         echo "Deleting policyset resources"
@@ -69,6 +125,28 @@ else
         echo "Remaining clusterpolicy resources:"
         kubectl --kubeconfig="$kubeconfig" get clusterpolicy -n "$namespace" -o name || echo "No resources found."
 
+
+    echo "==================================================="
+
+
+        # Delete CustomResourceDefinitions 
+        echo "Deleting CustomResourceDefinitions"
+        crds=$(kubectl --kubeconfig="$kubeconfig" get customresourcedefinition -o name | grep -i "nirmata.security.io")
+        echo "$crds" | xargs -I {} kubectl --kubeconfig="$kubeconfig" patch  {} -p '{"metadata":{"finalizers":[]}}' --type=merge
+        # echo "$crds" | xargs -I {} kubectl --kubeconfig="$kubeconfig" patch  {} -p '{"spec":{"finalizers":[]}}' --type=merge
+        retries=0
+        while [[ -n $crds && $retries -lt 3 ]]; do
+            echo "$crds" | xargs kubectl --kubeconfig="$kubeconfig" delete --force --grace-period=0
+            sleep 5
+            crds=$(kubectl --kubeconfig="$kubeconfig" get customresourcedefinition -o name | grep -i  "nirmata.security.io")
+            ((retries++))
+        done
+        if [[ -n $crds ]]; then
+            echo "Failed to delete CustomResourceDefinitions in namespace '$namespace'."
+            exit 1
+        fi
+        echo "Remaining CustomResourceDefinitions:"
+        kubectl --kubeconfig="$kubeconfig" get customresourcedefinition -o name | grep -i  "nirmata.security.io" || echo "No resources found."
 
     echo "==================================================="
 
@@ -564,4 +642,4 @@ else
         done
     done
 fi
-echo "==================================================="
+echo "==================================================="c
