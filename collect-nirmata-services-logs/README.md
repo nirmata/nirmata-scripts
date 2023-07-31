@@ -1,8 +1,7 @@
 # Script to collect nirmata services logs
 
 # Prerequisites 
-It uses kubeconfig from /root/.kube/config
-switch context to base cluster
+It uses kubeconfig from /root/.kube/config and switch context to base cluster
 
 <ins>**Usage:**</ins>
 
