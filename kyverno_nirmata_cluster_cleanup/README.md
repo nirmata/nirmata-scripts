@@ -3,7 +3,7 @@ This script is used to cleanup Kyverno,Nirmata,Nirmata Cluster and its related r
 <ins>**Usage:**</ins>
 - Make sure you have `kubectl client`, `curl` and `jq` installed on the machine where you are running this script
 - Make sure you have kubectl access to the cluster with kubeconfig file
-- The script takes atleast 5 arguments as inputs : `/kyverno_nirmata_cluster_cleanup.sh clustername Nirmata-API-Token Nirmata-URL namespace1 [namespace2 ...]`
+- The script takes atleast 5 arguments as inputs : `/kyverno_nirmata_cluster_cleanup.sh kubeconfig_path clustername Nirmata-API-Token Nirmata-URL namespace1 [namespace2 ...]`
 	- `kubeconfig_path` : Absolute path of kubeconfig file for the cluster, example /home/user/.kube/config
 	- clustername: Cluster name in Nirmata UI
 	- Nirmata-API-Token: Token for accessing the Nirmata API
