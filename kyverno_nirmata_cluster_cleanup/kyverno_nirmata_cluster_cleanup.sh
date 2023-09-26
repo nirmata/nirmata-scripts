@@ -606,6 +606,21 @@ else
     echo $CLUSTERID > clusterid_$CLUSTERNAME
 
     for clusterid in $(cat clusterid_$CLUSTERNAME); do
+        while true; do
+            echo "Checking cluster status for $CLUSTERNAME..."
+            cluster_state_response=$(curl -s -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Authorization: NIRMATA-API $TOKEN" -X GET "$NIRMATAURL/cluster/api/KubernetesCluster/$clusterid/state")
+
+            cluster_state=$(echo $cluster_state_response | jq -r .state)
+
+            if [[ "$cluster_state" == "ready" ]]; then
+                echo "Cluster $CLUSTERNAME is in 'ready' state. Waiting for it to disconnect..."
+                sleep 10
+            else
+                echo "Cluster $CLUSTERNAME is in '$cluster_state' state. Proceeding with removal..."
+                break
+            fi
+        done
+
         echo "Removing cluster $CLUSTERNAME from Nirmata..."
         delete_response=$(curl -s -H "Accept: application/json, text/javascript, */*; q=0.01" -H "Authorization: NIRMATA-API $TOKEN" -X DELETE "$NIRMATAURL/cluster/api/KubernetesCluster/$clusterid?action=remove")
 
