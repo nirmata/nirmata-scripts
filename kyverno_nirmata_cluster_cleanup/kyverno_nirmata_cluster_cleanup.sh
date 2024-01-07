@@ -75,7 +75,10 @@ else
 
         # Uninstall best-practice-policies chart
         echo "Uninstalling best-practice-policies chart..."
-        helm uninstall best-practice-policies -n default
+        helm uninstall best-practice-policies -n default --no-hooks
+        helm uninstall nirmata-kyverno-operator  -n nirmata-kyverno-operator --no-hooks
+        helm uninstall nirmata-kyverno-operator  -n nirmata-system --no-hooks
+        helm uninstall enterprise-kyverno-operator -n enterprise-kyverno-operator --no-hooks
 
         # Uninstall pod-security-policies chart
         echo "Uninstalling pod-security-policies chart..."
@@ -598,6 +601,7 @@ else
 
     # Delete secrets
     kubectl --kubeconfig="$kubeconfig" get secret -A | grep -i policies | awk '{print $2}' | xargs kubectl --kubeconfig="$kubeconfig" delete secret -n default --force --grace-period=0
+    kubectl delete secret sh.helm.release.v1.nirmata-kyverno-operator.v1 -n nirmata-system --force --grace-period=0
 
     echo "Kyverno and Nirmata-related resources are deleted from the cluster"
 
