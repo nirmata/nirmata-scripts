@@ -9,7 +9,8 @@ This script is designed to clean up Kubernetes namespaces. It requires at least 
 ### Usage
 
 ```bash
-./namespace_cleanup.sh kubeconfig namespace1 [namespace2 ...]
+chmod + x kyverno_cleanup_latest_nk4_1_10.sh
+./kyverno_cleanup_latest_nk4_1_10.sh kubeconfig namespace1 [namespace2 ...]
 ```
 
 #### Script Arguments
@@ -21,7 +22,8 @@ This script is designed to clean up Kubernetes namespaces. It requires at least 
 ### Example
 
 ```bash
-./namespace_cleanup.sh /home/user/.kube/config  nirmata-system niramta-kyverno-operator kyverno
+chmod + x kyverno_cleanup_latest_nk4_1_10.sh
+./kyverno_cleanup_latest_nk4_1_10.sh /home/user/.kube/config  nirmata-system niramta-kyverno-operator kyverno
 ```
 
 ### Warning
