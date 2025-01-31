@@ -23,7 +23,7 @@ chmod + x kyverno_cleanup_latest_nk4_1_10.sh
 
 ```bash
 chmod + x kyverno_cleanup_latest_nk4_1_10.sh
-./kyverno_cleanup_latest_nk4_1_10.sh /home/user/.kube/config  nirmata-system niramta-kyverno-operator kyverno
+./kyverno_cleanup_latest_nk4_1_10.sh /home/user/.kube/config  nirmata-system nirmata-kyverno-operator kyverno
 ```
 
 ### Warning
