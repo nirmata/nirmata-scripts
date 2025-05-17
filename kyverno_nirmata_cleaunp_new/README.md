@@ -60,11 +60,19 @@ The script cleans up the following resources in both the operator and Kyverno na
 
 2. **Webhook Configurations**
    ```yaml
+   # Validating Webhook Configurations
+   - kyverno-cleanup-validating-webhook-cfg
+   - kyverno-exception-validating-webhook-cfg
+   - kyverno-global-context-validating-webhook-cfg
    - kyverno-operator-validating-webhook-configuration
-   - kyverno-resource-validating-webhook-configuration
-   - kyverno-policy-validating-webhook-configuration
-   - kyverno-resource-mutating-webhook-configuration
-   - kyverno-policy-mutating-webhook-configuration
+   - kyverno-policy-validating-webhook-cfg
+   - kyverno-resource-validating-webhook-cfg
+   - kyverno-ttl-validating-webhook-cfg
+
+   # Mutating Webhook Configurations
+   - kyverno-policy-mutating-webhook-cfg
+   - kyverno-resource-mutating-webhook-cfg
+   - kyverno-verify-mutating-webhook-cfg
    ```
 
 3. **Cluster Roles**
