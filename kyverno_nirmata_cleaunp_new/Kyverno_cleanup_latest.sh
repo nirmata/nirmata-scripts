@@ -142,11 +142,16 @@ log "Cleaning up cluster-wide resources..."
 # Delete webhook configurations
 log "Deleting webhook configurations..."
 for webhook in \
+    "kyverno-cleanup-validating-webhook-cfg" \
+    "kyverno-exception-validating-webhook-cfg" \
+    "kyverno-global-context-validating-webhook-cfg" \
     "kyverno-operator-validating-webhook-configuration" \
-    "kyverno-resource-validating-webhook-configuration" \
-    "kyverno-policy-validating-webhook-configuration" \
-    "kyverno-resource-mutating-webhook-configuration" \
-    "kyverno-policy-mutating-webhook-configuration"; do
+    "kyverno-policy-validating-webhook-cfg" \
+    "kyverno-resource-validating-webhook-cfg" \
+    "kyverno-ttl-validating-webhook-cfg" \
+    "kyverno-policy-mutating-webhook-cfg" \
+    "kyverno-resource-mutating-webhook-cfg" \
+    "kyverno-verify-mutating-webhook-cfg"; do
     log "Deleting webhook configuration: $webhook"
     kubectl delete validatingwebhookconfiguration $webhook --ignore-not-found=true || \
     kubectl delete mutatingwebhookconfiguration $webhook --ignore-not-found=true
