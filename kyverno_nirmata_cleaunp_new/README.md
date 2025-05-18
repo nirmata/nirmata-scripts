@@ -131,23 +131,30 @@ The script cleans up the following resources in both the operator and Kyverno na
 ### 2. Deployment Scaling
 - Scales all deployments to 0 replicas
 - Waits for pods to terminate (60s timeout)
-- Ensures no active controllers are running
+- Additional 10-second wait to ensure complete termination
+- Verifies no pods are still running
+- Logs warning if pods are still present
 
 ### 3. Finalizer Removal
-- Removes finalizers from all resources
+- Implements retry mechanism (3 attempts) for finalizer removal
+- Verifies finalizer removal success after each attempt
+- 5-second wait between attempts
 - Handles both namespace and cluster-wide resources
 - Uses `kubectl patch` with `--type=merge`
+- Logs all finalizer removal attempts and results
 
 ### 4. Resource Deletion Order
 1. Namespace resources (pods, services, etc.)
 2. Webhook configurations
 3. RBAC resources (roles, rolebindings)
-4. CRDs
+4. CRDs with verification between steps
 
 ### 5. Error Handling
 - Uses `--ignore-not-found=true` for all deletions
 - Logs all errors with timestamps
 - Continues execution on non-critical errors
+- Implements retry logic for finalizer removal
+- Provides detailed logging of operation status
 
 ## Log File Format
 
@@ -162,21 +169,25 @@ Example:
 [2024-03-21 14:30:22] Kubernetes Context: my-cluster
 [2024-03-21 14:30:23] Cleaning up resources in namespace nirmata-system...
 [2024-03-21 14:30:23] Scaling down all deployments in namespace nirmata-system...
-[2024-03-21 14:30:24] Removing finalizers from CRD: kyvernoconfigs.security.nirmata.io
+[2024-03-21 14:30:24] Attempt 1: Removing finalizers from CRD: kyvernoconfigs.security.nirmata.io
+[2024-03-21 14:30:29] Successfully removed finalizers from CRD kyvernoconfigs.security.nirmata.io
 ```
 
 ## Common Issues and Solutions
 
 ### 1. Stuck Resources
 If resources are stuck in terminating state:
-- Check for remaining finalizers
+- Check for remaining finalizers using retry mechanism
 - Verify no controllers are running
 - Ensure proper permissions
+- Use the enhanced finalizer removal process
 
 ### 2. Finalizer Re-addition
 If finalizers are being re-added:
 - Ensure all deployments are scaled to 0
-- Wait for pods to terminate
+- Wait for pods to terminate (60s timeout + 10s additional wait)
+- Verify no pods are running
+- Use retry mechanism for finalizer removal
 - Check for running controllers
 
 ### 3. Permission Issues
@@ -191,10 +202,14 @@ If encountering permission errors:
 - Implements timeouts for long-running operations
 - Includes sleep periods to allow for resource cleanup
 - Logs all operations for performance analysis
+- Retry mechanism with appropriate wait times
+- Verification steps between major operations
 
 ## Security Considerations
 
 - No sensitive data in logs
 - Uses `--ignore-not-found=true` to prevent errors
 - Validates input to prevent command injection
-- Requires explicit context selection 
+- Requires explicit context selection
+- Implements proper error handling and logging
+- Verifies operation success before proceeding 
