@@ -75,106 +75,7 @@ remove_finalizers() {
     fi
 }
 
-# Function to remove finalizers from CRDs
-remove_crd_finalizers() {
-    local crd_name=$1
-    local max_attempts=3
-    local attempt=1
-    
-    while [ $attempt -le $max_attempts ]; do
-        log "Attempt $attempt: Removing finalizers from CRD $crd_name..."
-        
-        # Get the current finalizers and deletion timestamp
-        local finalizers=$(kubectl get crd $crd_name -o jsonpath='{.metadata.finalizers}' 2>/dev/null || echo "")
-        local deletion_timestamp=$(kubectl get crd $crd_name -o jsonpath='{.metadata.deletionTimestamp}' 2>/dev/null || echo "")
-        
-        if [ -z "$finalizers" ]; then
-            log "No finalizers found on CRD $crd_name"
-            return 0
-        fi
-        
-        # If deletion timestamp exists, we need to handle it differently
-        if [ ! -z "$deletion_timestamp" ]; then
-            log "CRD $crd_name has deletion timestamp, attempting to remove finalizers..."
-            # Use strategic merge patch to remove finalizers
-            kubectl patch crd $crd_name --type=merge -p '{"metadata":{"finalizers":null}}' || true
-        else
-            # Normal patch for finalizer removal
-            kubectl patch crd $crd_name -p '{"metadata":{"finalizers":[]}}' --type=merge || true
-        fi
-        
-        # Wait a moment to allow the change to take effect
-        sleep 5
-        
-        # Verify finalizers were removed
-        finalizers=$(kubectl get crd $crd_name -o jsonpath='{.metadata.finalizers}' 2>/dev/null || echo "")
-        if [ -z "$finalizers" ]; then
-            log "Successfully removed finalizers from CRD $crd_name"
-            return 0
-        fi
-        
-        log "Finalizers still present on CRD $crd_name, attempt $attempt of $max_attempts"
-        attempt=$((attempt + 1))
-    done
-    
-    log "Warning: Failed to remove finalizers from CRD $crd_name after $max_attempts attempts"
-    return 1
-}
-
-# Function to delete a CRD
-delete_crd() {
-    local crd_name=$1
-    local max_attempts=3
-    local attempt=1
-    
-    while [ $attempt -le $max_attempts ]; do
-        log "Attempt $attempt: Deleting CRD $crd_name..."
-        
-        # First check if CRD exists
-        if ! kubectl get crd $crd_name &>/dev/null; then
-            log "CRD $crd_name does not exist"
-            return 0
-        fi
-        
-        # Get current state
-        local deletion_timestamp=$(kubectl get crd $crd_name -o jsonpath='{.metadata.deletionTimestamp}' 2>/dev/null || echo "")
-        local finalizers=$(kubectl get crd $crd_name -o jsonpath='{.metadata.finalizers}' 2>/dev/null || echo "")
-        
-        if [ ! -z "$deletion_timestamp" ]; then
-            log "CRD $crd_name is already marked for deletion"
-            if [ ! -z "$finalizers" ]; then
-                log "Removing finalizers from CRD $crd_name..."
-                kubectl patch crd $crd_name --type=merge -p '{"metadata":{"finalizers":null}}' || true
-                sleep 5
-            fi
-        else
-            # Remove finalizers before deletion
-            remove_crd_finalizers "$crd_name"
-            
-            # Wait a moment before attempting deletion
-            sleep 5
-            
-            # Attempt to delete the CRD
-            log "Deleting CRD $crd_name..."
-            kubectl delete crd $crd_name --ignore-not-found=true
-        fi
-        
-        # Check if CRD still exists
-        if ! kubectl get crd $crd_name &>/dev/null; then
-            log "CRD $crd_name successfully deleted"
-            return 0
-        fi
-        
-        log "CRD $crd_name still exists, attempt $attempt of $max_attempts"
-        attempt=$((attempt + 1))
-        sleep 5
-    done
-    
-    log "Warning: Failed to delete CRD $crd_name after $max_attempts attempts"
-    return 1
-}
-
-# Function to delete resources in a namespace
+# Function to delete namespace resources
 delete_namespace_resources() {
     local namespace=$1
     log "Cleaning up resources in namespace $namespace..."
@@ -198,23 +99,19 @@ delete_namespace_resources() {
         kubectl get pods -n $namespace
     fi
 
-    # Remove finalizers from all resources
-    log "Removing finalizers from resources in namespace $namespace..."
+    # Remove finalizers and delete resources in one go
+    log "Removing finalizers and deleting resources in namespace $namespace..."
     for resource_type in all configmap secret serviceaccount role rolebinding networkpolicy pvc pdb hpa service ingress endpoints events; do
-        log "Removing finalizers from $resource_type resources..."
+        log "Processing $resource_type resources..."
         kubectl get $resource_type -n $namespace -o name 2>/dev/null | while read resource; do
             if [ ! -z "$resource" ]; then
                 log "Removing finalizers from $resource"
-                kubectl patch $resource -n $namespace -p '{"metadata":{"finalizers":[]}}' --type=merge || true
+                kubectl patch $resource -n $namespace --type=merge -p '{"metadata":{"finalizers":null}}' || true
+                # Immediately delete after removing finalizers
+                log "Deleting $resource"
+                kubectl delete $resource -n $namespace --ignore-not-found=true
             fi
         done
-    done
-    
-    # Delete all resources in the namespace
-    log "Deleting all resources in namespace $namespace..."
-    for resource_type in all configmap secret serviceaccount role rolebinding networkpolicy pvc pdb hpa service ingress endpoints events; do
-        log "Deleting all $resource_type resources..."
-        kubectl delete $resource_type --all -n $namespace --ignore-not-found=true
     done
 }
 
@@ -302,33 +199,9 @@ for binding in \
     kubectl delete clusterrolebinding $binding --ignore-not-found=true
 done
 
-# Delete CRDs
+# Delete CRDs using the simpler command
 log "Deleting CRDs..."
-for crd in \
-    "kyvernoconfigs.security.nirmata.io" \
-    "policysets.security.nirmata.io" \
-    "kyvernoadapters.security.nirmata.io" \
-    "clusterpolicies.kyverno.io" \
-    "policies.kyverno.io" \
-    "policyexceptions.kyverno.io" \
-    "admissionreports.kyverno.io" \
-    "backgroundscanreports.kyverno.io" \
-    "cleanuppolicies.kyverno.io" \
-    "clusteradmissionreports.kyverno.io" \
-    "clusterbackgroundscanreports.kyverno.io" \
-    "clustercleanuppolicies.kyverno.io" \
-    "globalcontextentries.kyverno.io" \
-    "updaterequests.kyverno.io" \
-    "clusterephemeralreports.reports.kyverno.io" \
-    "ephemeralreports.reports.kyverno.io" \
-    "policyreports.wgpolicyk8s.io" \
-    "clusterpolicyreports.wgpolicyk8s.io"; do
-    
-    # Delete the CRD with retries
-    delete_crd "$crd"
-    
-    # Wait a moment after deletion
-    sleep 5
-done
+
+kubectl get crd | egrep -i 'kyverno|nirmata|wgp' | awk '{ print $1 }' | xargs kubectl delete crd --force
 
 log "Cleanup completed! Log file: $LOG_FILE" 
