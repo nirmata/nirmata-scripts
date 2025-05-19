@@ -1,5 +1,36 @@
 # Kyverno Cleanup Technical Documentation
 
+## Usage
+
+### Prerequisites
+- kubectl installed and configured
+- Access to the target Kubernetes cluster
+- Sufficient permissions to delete resources (cluster-admin or equivalent)
+
+### Basic Usage
+```bash
+./cleanup-kyverno.sh <k8s-context> <operator-namespace> <kyverno-namespace>
+```
+
+### Example
+```bash
+# For Nirmata operator
+./cleanup-kyverno.sh my-cluster nirmata-system kyverno
+
+# For standard Kyverno installation
+./cleanup-kyverno.sh my-cluster nirmata kyverno
+```
+
+### Parameters
+- `<k8s-context>`: The Kubernetes context to use
+- `<operator-namespace>`: The namespace where the operator is installed
+- `<kyverno-namespace>`: The namespace where Kyverno is installed
+
+### Output
+- The script generates a log file named `kyverno-cleanup-YYYYMMDD-HHMMSS.log`
+- All operations are logged with timestamps
+- Progress and errors are displayed in real-time
+
 ## Resource Types Cleaned Up
 
 ### Namespace Resources
@@ -37,26 +68,15 @@ The script cleans up the following resources in both the operator and Kyverno na
 ### Cluster-wide Resources
 
 1. **Custom Resource Definitions (CRDs)**
-   ```yaml
-   - kyvernoconfigs.security.nirmata.io
-   - policysets.security.nirmata.io
-   - kyvernoadapters.security.nirmata.io
-   - clusterpolicies.kyverno.io
-   - policies.kyverno.io
-   - policyexceptions.kyverno.io
-   - admissionreports.kyverno.io
-   - backgroundscanreports.kyverno.io
-   - cleanuppolicies.kyverno.io
-   - clusteradmissionreports.kyverno.io
-   - clusterbackgroundscanreports.kyverno.io
-   - clustercleanuppolicies.kyverno.io
-   - globalcontextentries.kyverno.io
-   - updaterequests.kyverno.io
-   - clusterephemeralreports.reports.kyverno.io
-   - ephemeralreports.reports.kyverno.io
-   - policyreports.wgpolicyk8s.io
-   - clusterpolicyreports.wgpolicyk8s.io
+   The script uses a simplified approach to delete CRDs:
+   ```bash
+   kubectl get crd | egrep -i 'kyverno|nirmata|wgp' | awk '{ print $1 }' | xargs kubectl delete crd --force
    ```
+   This command:
+   - Gets all CRDs
+   - Filters for ones containing 'kyverno', 'nirmata', or 'wgp' (case insensitive)
+   - Extracts just the CRD names
+   - Force deletes them all at once
 
 2. **Webhook Configurations**
    ```yaml
