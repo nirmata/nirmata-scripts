@@ -20,6 +20,11 @@
 # For standard Kyverno installation
 ./cleanup-kyverno.sh my-cluster nirmata kyverno
 ```
+Note: If the script is stuck while deleting CRD's, remove finalizers from them by running below command. 
+
+```bash
+kubectl patch crd kyvernoconfigs.security.nirmata.io --type=merge -p '{"metadata":{"finalizers":null}}'
+```
 
 ### Parameters
 - `<k8s-context>`: The Kubernetes context to use
