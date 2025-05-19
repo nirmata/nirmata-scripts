@@ -84,16 +84,24 @@ remove_crd_finalizers() {
     while [ $attempt -le $max_attempts ]; do
         log "Attempt $attempt: Removing finalizers from CRD $crd_name..."
         
-        # Get the current finalizers
+        # Get the current finalizers and deletion timestamp
         local finalizers=$(kubectl get crd $crd_name -o jsonpath='{.metadata.finalizers}' 2>/dev/null || echo "")
+        local deletion_timestamp=$(kubectl get crd $crd_name -o jsonpath='{.metadata.deletionTimestamp}' 2>/dev/null || echo "")
         
         if [ -z "$finalizers" ]; then
             log "No finalizers found on CRD $crd_name"
             return 0
         fi
         
-        # Remove finalizers
-        kubectl patch crd $crd_name -p '{"metadata":{"finalizers":[]}}' --type=merge || true
+        # If deletion timestamp exists, we need to handle it differently
+        if [ ! -z "$deletion_timestamp" ]; then
+            log "CRD $crd_name has deletion timestamp, attempting to remove finalizers..."
+            # Use strategic merge patch to remove finalizers
+            kubectl patch crd $crd_name --type=merge -p '{"metadata":{"finalizers":null}}' || true
+        else
+            # Normal patch for finalizer removal
+            kubectl patch crd $crd_name -p '{"metadata":{"finalizers":[]}}' --type=merge || true
+        fi
         
         # Wait a moment to allow the change to take effect
         sleep 5
@@ -122,21 +130,38 @@ delete_crd() {
     while [ $attempt -le $max_attempts ]; do
         log "Attempt $attempt: Deleting CRD $crd_name..."
         
-        # First remove finalizers
-        remove_crd_finalizers "$crd_name"
-        
-        # Wait a moment before attempting deletion
-        sleep 5
-        
-        # Attempt to delete the CRD
-        if kubectl delete crd $crd_name --ignore-not-found=true; then
-            log "Successfully deleted CRD $crd_name"
+        # First check if CRD exists
+        if ! kubectl get crd $crd_name &>/dev/null; then
+            log "CRD $crd_name does not exist"
             return 0
+        fi
+        
+        # Get current state
+        local deletion_timestamp=$(kubectl get crd $crd_name -o jsonpath='{.metadata.deletionTimestamp}' 2>/dev/null || echo "")
+        local finalizers=$(kubectl get crd $crd_name -o jsonpath='{.metadata.finalizers}' 2>/dev/null || echo "")
+        
+        if [ ! -z "$deletion_timestamp" ]; then
+            log "CRD $crd_name is already marked for deletion"
+            if [ ! -z "$finalizers" ]; then
+                log "Removing finalizers from CRD $crd_name..."
+                kubectl patch crd $crd_name --type=merge -p '{"metadata":{"finalizers":null}}' || true
+                sleep 5
+            fi
+        else
+            # Remove finalizers before deletion
+            remove_crd_finalizers "$crd_name"
+            
+            # Wait a moment before attempting deletion
+            sleep 5
+            
+            # Attempt to delete the CRD
+            log "Deleting CRD $crd_name..."
+            kubectl delete crd $crd_name --ignore-not-found=true
         fi
         
         # Check if CRD still exists
         if ! kubectl get crd $crd_name &>/dev/null; then
-            log "CRD $crd_name no longer exists"
+            log "CRD $crd_name successfully deleted"
             return 0
         fi
         
